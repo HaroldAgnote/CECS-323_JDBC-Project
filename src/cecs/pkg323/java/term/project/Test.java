@@ -10,5 +10,5 @@ package cecs.pkg323.java.term.project;
  * @author xinyi
  */
 public class Test {
-    //HI
+    //Hi
 }
