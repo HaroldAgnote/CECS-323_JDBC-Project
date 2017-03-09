@@ -63,7 +63,7 @@ public class CECS323JavaTermProject {
             System.out.println("Creating statement...");
             stmt = conn.createStatement();
             String sql;
-            sql = "SELECT au_id, au_fname, au_lname, phone FROM Authors";
+            sql = "SELECT * FROM TESTTABLE";
             ResultSet rs = stmt.executeQuery(sql);
             
             //STEP 5: Extract data from result set

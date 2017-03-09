@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="1352654930">
-    <data-source source="LOCAL" name="Derby (Embedded) - Term_Project" uuid="25b0ce67-6e42-4386-9864-dd3534811d0d">
-      <driver-ref>derby.embedded</driver-ref>
+  <component name="DataSourceManagerImpl" format="xml" hash="1548009239">
+    <data-source source="LOCAL" name="Derby (Remote) - Term_Project@localhost" uuid="0b94d03d-c552-4811-a0d0-6e50a6910a62">
+      <driver-ref>derby.remote</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>org.apache.derby.jdbc.EmbeddedDriver</jdbc-driver>
-      <jdbc-url>jdbc:derby:$PROJECT_DIR$/../CECS-323/Databases/Term_Project;create=true</jdbc-url>
+      <jdbc-driver>org.apache.derby.jdbc.ClientDriver</jdbc-driver>
+      <jdbc-url>jdbc:derby://localhost:1527/Term_Project;create=true</jdbc-url>
     </data-source>
   </component>
 </project>
