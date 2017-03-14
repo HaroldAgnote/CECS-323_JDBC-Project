@@ -18,7 +18,7 @@ Current Goals:
 O - Open
 X - Complete
 
-[O] Insert Data into tables (WritingGroups, Books, Publishers)
+[X] Insert Data into tables (WritingGroups, Books, Publishers)
 
 [O] Implement Java/SQL Interaction to retrieve/manipulate data in Database
 

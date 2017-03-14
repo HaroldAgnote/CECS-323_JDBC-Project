@@ -1,3 +1,5 @@
+package cecs.pkg323.java.term.project;
+
 import java.util.Scanner;
 
 /**

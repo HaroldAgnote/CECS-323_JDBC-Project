@@ -1,27 +1,27 @@
 CREATE TABLE WritingGroups (
-  groupName VARCHAR(30) NOT NULL,
-  headWriter VARCHAR(30),
+  groupName VARCHAR(50) NOT NULL,
+  headWriter VARCHAR(50),
   yearFormed INTEGER,
-  subject VARCHAR(20),
+  subject VARCHAR(30),
 
   CONSTRAINT writingGroups_pk
     PRIMARY KEY (groupName)
 );
 
 CREATE TABLE publishers (
-  publisherName VARCHAR(30) NOT NULL,
+  publisherName VARCHAR(50) NOT NULL,
   publisherAddress VARCHAR(50),
   publisherPhone VARCHAR(20),
-  publisherEmail VARCHAR(20),
+  publisherEmail VARCHAR(30),
 
   CONSTRAINT publishers_pk
   PRIMARY KEY (publisherName)
 );
 
 CREATE TABLE books (
-  groupName VARCHAR(30) NOT NULL,
-  bookTitle VARCHAR(30) NOT NULL,
-  publisherName VARCHAR(30) NOT NULL,
+  groupName VARCHAR(50) NOT NULL,
+  bookTitle VARCHAR(50) NOT NULL,
+  publisherName VARCHAR(50) NOT NULL,
   yearPublished INTEGER,
   numberOfPages INTEGER,
 
@@ -61,9 +61,9 @@ insert into books
 (groupName, bookTitle,publisherName,yearPublished, numberOfPages ) values
 ('J.K. Rowling','Harry Potter and the Philosophers Stone','Scholastic',2013,336),
 ('J.K. Rowling','Fantastic Beast and Where to Find Them','Scholastic',2001,128),
-('New Day Friction','The Ruler of New World','Alfresco Press',2007,357),
+('New Day Fiction','The Ruler of New World','Alfresco Press',2007,357),
 ('Coffee House','The Day I Met You','Aberdeen Bay',2017,666),
-('New England Scien Fiction Association, Inc.','Down the Robot Street','Aberdeen Bay',2001,673),
+('New England Science Fiction Association, Inc.','Down the Robot Street','Aberdeen Bay',2001,673),
 ('Northwest Science Writers Association','To the Road of Mars','Broadway Books',2005,274),
 ('California Writers Club','The Truth Behind the Face','Crown',2011,174),
 ('Coffee House','How to Raise a Child','Scholastic',2014,999),

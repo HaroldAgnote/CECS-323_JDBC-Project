@@ -59,6 +59,15 @@ public class CECS323JavaTermProject {
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL);
             
+            boolean done = false;
+            
+            do
+            {
+                
+            }
+            while (!done);
+            
+            /*
             //STEP 4: Execute a query
             System.out.println("Creating statement...");
             stmt = conn.createStatement();
@@ -83,6 +92,7 @@ public class CECS323JavaTermProject {
             rs.close();
             stmt.close();
             conn.close();
+            */
         } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
@@ -107,4 +117,20 @@ public class CECS323JavaTermProject {
         }//end try
         System.out.println("Goodbye!");
     }//end main
+    
+    public static int displayMainMenu()
+    {
+        System.out.println("What would you like to do?\n");
+        System.out.println("1. List Writing Groups");
+        System.out.println("2. List Publishers");
+        System.out.println("3. List Books\n");
+        System.out.println("4. Add new Book");
+        System.out.println("5. Insert a New Publisher\n");
+        System.out.println("6. Remove a Book\n");
+        System.out.println("7. Quit");
+        return UserInput.getInt(1,6);
+    }
+    
 }//end FirstExample}
+
+
