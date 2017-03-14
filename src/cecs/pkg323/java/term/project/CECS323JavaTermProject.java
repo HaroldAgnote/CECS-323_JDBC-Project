@@ -1,6 +1,7 @@
 package cecs.pkg323.java.term.project;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -71,14 +72,11 @@ public class CECS323JavaTermProject {
                     
                     switch ( menu )
                     {
-                        case 1: table = "WRITINGGROUPS";
-                                data = "GroupName";
+                        case 1: displayInformation( "WRITINGGROUPS", "GroupName", conn );
                                 break;
-                        case 2: table = "PUBLISHERS";
-                                data = "PublisherName";
+                        case 2: displayInformation( "PUBLISHERS", "PublisherName", conn );
                                 break;
-                        case 3: table = "BOOKS";
-                                data = "BookTitle";
+                        case 3: displayInformation( "BOOKS", "BookTitle", conn );
                                 break;
                         case 4: table = "BOOKS";
                                 break;
@@ -87,18 +85,7 @@ public class CECS323JavaTermProject {
                         case 6: table = "BOOKS";
                                 break;
                     }
-                    stmt = conn.createStatement();
-                    String sql = "SELECT " + data + " FROM " + table;
-                    ResultSet rs = stmt.executeQuery( sql );
-                    System.out.println(data);
-                    int i = 1;
-                    while (rs.next())
-                    {
-                        String info = rs.getString(data);
-                        System.out.println(i + ". " + info);
-                        i++;
-                        System.out.println();
-                    }
+                    
                 }
                 else
                 {
@@ -168,14 +155,56 @@ public class CECS323JavaTermProject {
         System.out.println("5. Insert a New Publisher\n");
         System.out.println("6. Remove a Book\n");
         System.out.println("7. Quit\n");
-        return UserInput.getInt(1,6);
+        return UserInput.getInt(1,7);
     }
     
-    public static void displayInformation(String table, String mainCol)
+    public static void displayInformation(String table, String mainCol, Connection conn) throws SQLException
     {
-        
+        ArrayList <String> information = new ArrayList <String> ();
+        Statement stmt = null;
+        stmt = conn.createStatement();
+        String sql = "SELECT " + mainCol + " FROM " + table;
+        sql += "\nORDER BY " + mainCol;
+        ResultSet rs = stmt.executeQuery( sql );
+        System.out.println(mainCol);
+        int i = 1;
+        while (rs.next())
+        {
+            String info = rs.getString(mainCol);
+            information.add( info );
+            System.out.println(i + ". " + info);
+            i++;
+            System.out.println();
+        }
+        System.out.println(i + 1 + ". Go Back\n");
+        System.out.print("Select an entry to view more information about: " );
+        int choice = UserInput.getInt( 1, i + 1 );
+        if (choice < i + 1)
+        {
+            String info = information.get( choice - 1 );
+            sql = "SELECT * FROM " + table;
+            sql += "\nWHERE " + mainCol + " = '" + info + "'";
+            rs = stmt.executeQuery( sql );
+            ResultSetMetaData data = rs.getMetaData();
+            String [] columns = new String [data.getColumnCount()];
+            String [] rowData = new String[columns.length];
+            rs.next();
+            for (int j = 0; j < columns.length; j++)
+            {
+                columns[j] = data.getColumnName( j + 1 );
+                rowData[j] = rs.getString(columns[j]);
+            }
+            for (int k = 0; k < columns.length; k++)
+            {
+                System.out.print(columns[k] + "\t");
+            }
+            System.out.println();
+            for (int l = 0; l < columns.length; l++)
+            {
+                System.out.print(rowData[l] + "\t");
+            }
+        }
     }
-    
-}//end FirstExample}
+}
 
 
