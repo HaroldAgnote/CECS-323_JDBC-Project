@@ -63,7 +63,47 @@ public class CECS323JavaTermProject {
             
             do
             {
-                
+                int menu = displayMainMenu();
+                if (menu != 7)
+                {
+                    String table = "";
+                    String data = "";
+                    
+                    switch ( menu )
+                    {
+                        case 1: table = "WRITINGGROUPS";
+                                data = "GroupName";
+                                break;
+                        case 2: table = "PUBLISHERS";
+                                data = "PublisherName";
+                                break;
+                        case 3: table = "BOOKS";
+                                data = "BookTitle";
+                                break;
+                        case 4: table = "BOOKS";
+                                break;
+                        case 5: table = "PUBLISHER";
+                                break;
+                        case 6: table = "BOOKS";
+                                break;
+                    }
+                    stmt = conn.createStatement();
+                    String sql = "SELECT " + data + " FROM " + table;
+                    ResultSet rs = stmt.executeQuery( sql );
+                    System.out.println(data);
+                    int i = 1;
+                    while (rs.next())
+                    {
+                        String info = rs.getString(data);
+                        System.out.println(i + ". " + info);
+                        i++;
+                        System.out.println();
+                    }
+                }
+                else
+                {
+                    done = true;
+                }
             }
             while (!done);
             
@@ -120,15 +160,20 @@ public class CECS323JavaTermProject {
     
     public static int displayMainMenu()
     {
-        System.out.println("What would you like to do?\n");
+        System.out.println("\nWhat would you like to do?\n");
         System.out.println("1. List Writing Groups");
         System.out.println("2. List Publishers");
         System.out.println("3. List Books\n");
         System.out.println("4. Add new Book");
         System.out.println("5. Insert a New Publisher\n");
         System.out.println("6. Remove a Book\n");
-        System.out.println("7. Quit");
+        System.out.println("7. Quit\n");
         return UserInput.getInt(1,6);
+    }
+    
+    public static void displayInformation(String table, String mainCol)
+    {
+        
     }
     
 }//end FirstExample}
