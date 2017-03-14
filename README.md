@@ -23,3 +23,15 @@ X - Complete
 [O] Implement Java/SQL Interaction to retrieve/manipulate data in Database
 
 [O] Implement User Interface (Basic Console Menu)
+
+Tasks:
+
+Harold:
+	- Finish implementation of listing table data
+	- Encapusulate listing of data into methods
+	- Fix any syntax or aesthetic issues
+
+Xinyi:
+	- Implement adding/removing Books from Database
+	- Implement adding publisher and updating Books
+
