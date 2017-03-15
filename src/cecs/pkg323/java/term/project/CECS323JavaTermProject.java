@@ -78,11 +78,30 @@ public class CECS323JavaTermProject {
                                 break;
                         case 3: displayInformation( "BOOKS", "BookTitle", conn );
                                 break;
-                        case 4: table = "BOOKS"; // TODO Add a book
+                        case 4: table = "BOOKS";
+				System.out.println("Please enter book title");
+                                String title = UserInput.getInputLine();
+                                System.out.println("Please enter book year published");
+                                int year = UserInput.getInt();
+                                System.out.println("Please enter total number of pages the book has");
+                                int page = UserInput.getInt();
+                                System.out.println("Please enter the writer group's name of the book");
+                                String groupName = UserInput.getInputLine();
+                                System.out.println("Please enter publisher name of the book");
+                                String publisher = UserInput.getInputLine();
+                                String sql = "insert into "+ table;
+                                sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
+                                sql += "'" + groupName + "'" +"," + "'"+title +"'"+","+"'"+publisher+"'"+","+year+","+page+")";
+                                stmt = conn.createStatement();
+                                stmt.executeUpdate( sql );
+			// TODO Add a book
                                 break;
                         case 5: table = "PUBLISHER"; // TODO Add a Publisher/Update Books
                                 break;
                         case 6: table = "BOOKS"; // TODO Remove a book
+                                displayInformation( "BOOKS", "BookTitle", conn );
+                                String bookname = "a"; //modify
+                                sql = "delete from "+table + "where book.booktitle = '" +bookname+"'";
                                 break;
                     }
                 }
