@@ -78,14 +78,13 @@ public class CECS323JavaTermProject {
                                 break;
                         case 3: displayInformation( "BOOKS", "BookTitle", conn );
                                 break;
-                        case 4: table = "BOOKS";
+                        case 4: table = "BOOKS"; // TODO Add a book
                                 break;
-                        case 5: table = "PUBLISHER";
+                        case 5: table = "PUBLISHER"; // TODO Add a Publisher/Update Books
                                 break;
-                        case 6: table = "BOOKS";
+                        case 6: table = "BOOKS"; // TODO Remove a book
                                 break;
                     }
-                    
                 }
                 else
                 {
