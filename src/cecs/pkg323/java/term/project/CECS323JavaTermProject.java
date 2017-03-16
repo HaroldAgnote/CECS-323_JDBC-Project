@@ -1,6 +1,5 @@
 package cecs.pkg323.java.term.project;
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -218,7 +217,8 @@ public class CECS323JavaTermProject {
         PreparedStatement stmt = conn.prepareStatement( sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE );
         ResultSet rs = stmt.executeQuery();
         ResultSetMetaData metaData = rs.getMetaData();
-        System.out.println(mainCol);
+        int mainColLength = metaData.getColumnDisplaySize( rs.findColumn( mainCol ) );
+        System.out.println(String.format( "%-" + mainColLength + "s\n", mainCol ));
         int i = 1;
         while (rs.next())
         {
@@ -245,6 +245,8 @@ public class CECS323JavaTermProject {
             information.add( info );
             i++;
         }
+        ResultSetMetaData metaData = rs.getMetaData();
+        
         System.out.print("Select an entry to view more information about: " );
         int choice = UserInput.getInt( 1, i + 1 );
         if (choice < i + 1)
@@ -253,23 +255,27 @@ public class CECS323JavaTermProject {
             stmt.setString(1, info);
             rs = stmt.executeQuery();
             ResultSetMetaData data = rs.getMetaData();
+            int [] colLength = new int[data.getColumnCount()];
             String [] columns = new String [data.getColumnCount()];
             String [] rowData = new String[columns.length];
             rs.next();
+            System.out.println();
             for (int j = 0; j < columns.length; j++)
             {
                 columns[j] = data.getColumnName( j + 1 );
+                colLength[j] = data.getColumnDisplaySize(rs.findColumn( data.getColumnName( j + 1 ) )) + 5;
                 rowData[j] = rs.getString(columns[j]);
             }
             for (int k = 0; k < columns.length; k++)
             {
-                System.out.print(columns[k] + "\t");
+                System.out.print(String.format( "%-" + colLength[k] + "s", columns[k] ));
             }
-            System.out.println();
+            System.out.println("\n");
             for (int l = 0; l < columns.length; l++)
             {
-                System.out.print(rowData[l] + "\t");
+                System.out.print(String.format( "%-" + colLength[l] + "s", rowData[l] ));
             }
+            System.out.println("\n");
         }
     }
     
