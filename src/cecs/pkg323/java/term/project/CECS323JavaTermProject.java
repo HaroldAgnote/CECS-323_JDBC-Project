@@ -245,36 +245,43 @@ public class CECS323JavaTermProject
         }
         ResultSetMetaData metaData = rs.getMetaData();
         
-        System.out.print( "Select an entry to view more information about: " );
-        int choice = UserInput.getInt( 1, i + 1 );
-        if ( choice < i )
+        int choice = 0;
+        do
         {
-            String info = information.get( choice - 1 );
-            stmt.setString( 1, info );
-            rs = stmt.executeQuery();
-            ResultSetMetaData data = rs.getMetaData();
-            int[] colLength = new int[ data.getColumnCount() ];
-            String[] columns = new String[ data.getColumnCount() ];
-            String[] rowData = new String[ columns.length ];
-            rs.next();
-            System.out.println();
-            for ( int j = 0; j < columns.length; j++ )
+            System.out.print( "Select an entry from " + metaData.getTableName( 1 ) + " to view more information about: " );
+            choice = UserInput.getInt( 1, i );
+            if ( choice < i )
             {
-                columns[ j ] = data.getColumnName( j + 1 );
-                colLength[ j ] = data.getColumnDisplaySize( rs.findColumn( data.getColumnName( j + 1 ) ) ) + 5;
-                rowData[ j ] = rs.getString( columns[ j ] );
+                String info = information.get( choice - 1 );
+                stmt.setString( 1, info );
+                rs = stmt.executeQuery();
+                ResultSetMetaData data = rs.getMetaData();
+                int[] colLength = new int[ data.getColumnCount() ];
+                String[] columns = new String[ data.getColumnCount() ];
+                String[] rowData = new String[ columns.length ];
+                rs.next();
+                System.out.println();
+                for ( int j = 0; j < columns.length; j++ )
+                {
+                    columns[ j ] = data.getColumnName( j + 1 );
+                    colLength[ j ] = data.getColumnDisplaySize( rs.findColumn( data.getColumnName( j + 1 ) ) ) + 5;
+                    rowData[ j ] = rs.getString( columns[ j ] );
+                }
+                for ( int k = 0; k < columns.length; k++ )
+                {
+                    System.out.print( String.format( "%-" + colLength[ k ] + "s", columns[ k ] ) );
+                }
+                System.out.println( "\n" );
+                for ( int l = 0; l < columns.length; l++ )
+                {
+                    System.out.print( String.format( "%-" + colLength[ l ] + "s", rowData[ l ] ) );
+                }
+                System.out.println( "\n" );
+                rs.beforeFirst();
             }
-            for ( int k = 0; k < columns.length; k++ )
-            {
-                System.out.print( String.format( "%-" + colLength[ k ] + "s", columns[ k ] ) );
-            }
-            System.out.println( "\n" );
-            for ( int l = 0; l < columns.length; l++ )
-            {
-                System.out.print( String.format( "%-" + colLength[ l ] + "s", rowData[ l ] ) );
-            }
-            System.out.println( "\n" );
         }
+        while ( choice < i );
+        
     }
     
     // TODO: Need to account for nonexistant publishers/writing groups
