@@ -6,19 +6,16 @@
 
 ### CECS 323 - Sec. 07
 
+---
+
 This repository will host the CECS 323 - JDBC Project in order to apply concepts of
 Database Fundamentals.
 
 Due: 3/20/2017
 
-Current Goals:
+---
 
-   
-   O - Open
-   
-   I - In Progress
-   
-   X - Complete
+Current Goals:
 
  * [X] Insert Data into tables (WritingGroups, Books, Publishers)
  * [ ] Implement Java/SQL Interaction to retrieve/manipulate data in Database 
@@ -27,7 +24,7 @@ Current Goals:
 Tasks:
 
 
-Harold:
+ * Harold:
     
    - Finish implementation of listing table data
    
@@ -36,7 +33,7 @@ Harold:
    - Fix any syntax or aesthetic issues
 
 
-Xinyi:
+ * Xinyi:
 
    - Implement adding/removing Books from Database
    
