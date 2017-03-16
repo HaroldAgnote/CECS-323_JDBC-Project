@@ -145,7 +145,7 @@ public class CECS323JavaTermProject
         System.out.println( "2. Xinyi Chen\n" );
         System.out.println( "3. Manual Login");
         
-        int choice = UserInput.getInt( 1, 2 );
+        int choice = UserInput.getInt( 1, 3 );
         
         if ( choice == 1 )
         {
@@ -243,12 +243,10 @@ public class CECS323JavaTermProject
             information.add( info );
             i++;
         }
-        ResultSetMetaData metaData = rs.getMetaData();
-        
         int choice = 0;
         do
         {
-            System.out.print( "Select an entry from " + metaData.getTableName( 1 ) + " to view more information about: " );
+            System.out.print( "Select an entry from " + table + " to view more information about: " );
             choice = UserInput.getInt( 1, i );
             if ( choice < i )
             {
@@ -284,7 +282,11 @@ public class CECS323JavaTermProject
         
     }
     
-    // TODO: Need to account for nonexistant publishers/writing groups
+    /*
+     * TODO: Need to account for nonexistant publishers/writing groups
+     * Planning on just checking if a Publisher/Writing Group exists in the table
+     * If so, proceed with add, otherwise prompt user to select a valid 
+     */
     public static void insertBook( Connection conn ) throws SQLException
     {
         Statement stmt = null;  // TODO: Change to Prepared Statement
@@ -305,6 +307,22 @@ public class CECS323JavaTermProject
         stmt = conn.createStatement();
         stmt.executeUpdate( sql );
     }
+    
+    public static ArrayList <String> getPublishers (Connection conn) throws SQLException
+    {
+        ArrayList <String> publishers = new ArrayList <>(  );
+        String table = "PUBLISHERS";
+        
+        return publishers;
+    }
+    
+    public static ArrayList <String> getWritingGroups (Connection conn) throws SQLException
+    {
+        ArrayList <String> writingGroups = new ArrayList <>(  );
+        String table = "WRITINGGROUPS";
+        return writingGroups;
+    }
+    
     
     public static String singleQuoteString( String s )
     {
