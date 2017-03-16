@@ -1,7 +1,9 @@
 package cecs.pkg323.java.term.project;
 
 import java.sql.*;
-import java.util.ArrayList;
+import java.time.Year;
+import java.util.*;
+import java.util.Date;
 
 /**
  * @author Mimi Opkins with some tweaking from Dave Brown
@@ -254,8 +256,9 @@ public class CECS323JavaTermProject
                 stmt.setString( 1, info );
                 rs = stmt.executeQuery();
                 ResultSetMetaData data = rs.getMetaData();
-                int[] colLength = new int[ data.getColumnCount() ];
-                String[] columns = new String[ data.getColumnCount() ];
+                int numColumns = data.getColumnCount();
+                int[] colLength = new int[ numColumns ];
+                String[] columns = new String[ numColumns ];
                 String[] rowData = new String[ columns.length ];
                 rs.next();
                 System.out.println();
@@ -283,43 +286,143 @@ public class CECS323JavaTermProject
     }
     
     /*
-     * TODO: Need to account for nonexistant publishers/writing groups
+     * TODO: Need to account for nonexistent publishers/writing groups
      * Planning on just checking if a Publisher/Writing Group exists in the table
-     * If so, proceed with add, otherwise prompt user to select a valid 
+     * If so, proceed with add, otherwise prompt user to select a valid
      */
     public static void insertBook( Connection conn ) throws SQLException
     {
+        final int currentYear = (Calendar.getInstance()).get( Calendar.YEAR );
+        
+        HashSet <String> publishers = getPublishers( conn );
+        HashSet <String> writingGroups = getWritingGroups( conn );
+    
+        String groupName;
+        String title;
+        String publisherName;
+        int year;
+        int pages;
+        
+        boolean valid = false;
         Statement stmt = null;  // TODO: Change to Prepared Statement
         String table = "BOOKS";
-        System.out.println( "Please enter book title" );
-        String title = UserInput.getInputLine();
-        System.out.println( "Please enter book year published" );
-        int year = UserInput.getInt();
+        System.out.print( "Please Enter Book Title: " );
+        do
+        {
+            title = UserInput.getInputLine();
+            if (title.trim().isEmpty())
+            {
+                System.out.println("Title cannot be Empty");
+            }
+            else if (title.length() > 50)
+            {
+                System.out.println("Title is too long");
+            }
+            else 
+            {
+                break;
+            }
+        }
+        while ( true );
+        do
+        {
+            System.out.println( "Please enter book year published" );
+            year = UserInput.getInt();
+            if (year > currentYear)
+            {
+                System.out.println("This book can't be published in the future");
+            }
+            else if (year < 1900)
+            {
+                System.out.println("Please enter a year after the 1900's");
+            }
+            else
+            {
+                break;
+            }
+        }
+        while ( true );
         System.out.println( "Please enter total number of pages the book has" );
-        int page = UserInput.getInt();
-        System.out.println( "Please enter the writer group's name of the book" );
-        String groupName = UserInput.getInputLine();
-        System.out.println( "Please enter publisher name of the book" );
-        String publisher = UserInput.getInputLine();
+        pages = UserInput.getInt();
+        do
+        {
+            System.out.println( "Please enter the writer group's name of the book" );
+            groupName = UserInput.getInputLine();
+            if (groupName.trim().isEmpty())
+            {
+                System.out.println("Writing Group Name cannot be empty");
+            }
+            else if (!writingGroups.contains( groupName ))
+            {
+                System.out.println(groupName + " does not exist in WRITINGGROUPS");
+                System.out.println("Please enter an existing Writing Group from the list:");
+                displayInformation( "WRITINGGROUPS", "GROUPNAME", conn );
+            }
+            else
+            {
+                break;
+            }
+        }
+        while ( true );
+        
+        do
+        {
+            System.out.println( "Please enter publisher name of the book" );
+            publisherName = UserInput.getInputLine();
+            if (publisherName.trim().isEmpty())
+            {
+                System.out.println("Publisher Name can't be empty");
+            }
+            else if (!publishers.contains( publisherName ))
+            {
+                System.out.println(publisherName + " does not exist in PUBLISHERS");
+                System.out.println("Please enter an existing Publisher from the list");
+                displayInformation( "PUBLISHERS", "PUBLISHERNAME", conn );
+            }
+            else
+            {
+                break;
+            }
+        }
+        while ( true );
         String sql = "insert into " + table;
         sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
-        sql += singleQuoteString( groupName ) + "," + singleQuoteString( title ) + "," + singleQuoteString( publisher ) + "," + year + "," + page + ")";
+        sql += singleQuoteString( groupName ) + "," + singleQuoteString( title ) + "," + singleQuoteString( publisherName ) + "," + year + "," + pages + ")";
         stmt = conn.createStatement();
         stmt.executeUpdate( sql );
     }
     
-    public static ArrayList <String> getPublishers (Connection conn) throws SQLException
+    
+    
+    public static HashSet <String> getPublishers(Connection conn) throws SQLException
     {
-        ArrayList <String> publishers = new ArrayList <>(  );
-        String table = "PUBLISHERS";
+        HashSet <String> publishers = new HashSet<>(  );
+        String sql = "SELECT PUBLISHERNAME FROM PUBLISHERS";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery( sql );
+    
+        while ( rs.next() )
+        {
+            String info = rs.getString( "PUBLISHERNAME" );
+            publishers.add( info );
+        }
         
         return publishers;
     }
     
-    public static ArrayList <String> getWritingGroups (Connection conn) throws SQLException
+    public static HashSet <String> getWritingGroups(Connection conn) throws SQLException
     {
-        ArrayList <String> writingGroups = new ArrayList <>(  );
-        String table = "WRITINGGROUPS";
+        HashSet <String> writingGroups = new HashSet<>(  );
+        String sql = "SELECT GROUPNAME FROM WRITINGGROUPS";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery( sql );
+    
+        while ( rs.next() )
+        {
+            String info = rs.getString( "GROUPNAME" );
+            writingGroups.add( info );
+        }
+    
         return writingGroups;
     }
     

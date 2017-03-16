@@ -18,8 +18,9 @@ Due: 3/20/2017
 Current Goals:
 
  * [X] Insert Data into tables (WritingGroups, Books, Publishers)
- * [ ] Implement Java/SQL Interaction to retrieve/manipulate data in Database 
- * [ ] Implement User Interface (Basic Console Menu)
+ * [ ] Implement Java/SQL Interaction to retrieve/manipulate data in Database
+ * [ ] Implement Error Checking
+ * [X] Implement User Interface (Basic Console Menu)
 
 Tasks:
 

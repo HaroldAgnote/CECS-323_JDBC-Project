@@ -69,3 +69,5 @@ insert into books
 ('Coffee House','How to Raise a Child','Scholastic',2014,999),
 ('Northwest Science Writers Association','Burning Sky','Scholastic',1999,244),
 ('New Day Fiction','The Girl Under the Bodhi Tree','Broadway Books',2015,365);
+
+-- TODO: Maybe we should add more entries that contain NULL values?
