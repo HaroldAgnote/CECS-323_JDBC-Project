@@ -78,30 +78,14 @@ public class CECS323JavaTermProject {
                                 break;
                         case 3: displayInformation( "BOOKS", "BookTitle", conn );
                                 break;
-                        case 4: table = "BOOKS";
-				System.out.println("Please enter book title");
-                                String title = UserInput.getInputLine();
-                                System.out.println("Please enter book year published");
-                                int year = UserInput.getInt();
-                                System.out.println("Please enter total number of pages the book has");
-                                int page = UserInput.getInt();
-                                System.out.println("Please enter the writer group's name of the book");
-                                String groupName = UserInput.getInputLine();
-                                System.out.println("Please enter publisher name of the book");
-                                String publisher = UserInput.getInputLine();
-                                String sql = "insert into "+ table;
-                                sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
-                                sql += "'" + groupName + "'" +"," + "'"+title +"'"+","+"'"+publisher+"'"+","+year+","+page+")";
-                                stmt = conn.createStatement();
-                                stmt.executeUpdate( sql );
-			// TODO Add a book
+                        case 4: insertBook( conn );
                                 break;
                         case 5: table = "PUBLISHER"; // TODO Add a Publisher/Update Books
                                 break;
                         case 6: table = "BOOKS"; // TODO Remove a book
                                 displayInformation( "BOOKS", "BookTitle", conn );
                                 String bookname = "a"; //modify
-                                sql = "delete from "+table + "where book.booktitle = '" +bookname+"'";
+                                String sql = "delete from "+table + "where book.booktitle = " + singleQuoteString( bookname );
                                 break;
                     }
                 }
@@ -195,6 +179,12 @@ public class CECS323JavaTermProject {
             System.out.println();
         }
         System.out.println(i + 1 + ". Go Back\n");
+        
+    }
+    
+    public static void displayMore(String table, String mainCol, Connection conn)
+    {
+        String sql;
         System.out.print("Select an entry to view more information about: " );
         int choice = UserInput.getInt( 1, i + 1 );
         if (choice < i + 1)
@@ -222,6 +212,32 @@ public class CECS323JavaTermProject {
                 System.out.print(rowData[l] + "\t");
             }
         }
+    }
+    
+    public static void insertBook(Connection conn) throws SQLException
+    {
+        Statement stmt = null;
+        String table = "BOOKS";
+        System.out.println("Please enter book title");
+        String title = UserInput.getInputLine();
+        System.out.println("Please enter book year published");
+        int year = UserInput.getInt();
+        System.out.println("Please enter total number of pages the book has");
+        int page = UserInput.getInt();
+        System.out.println("Please enter the writer group's name of the book");
+        String groupName = UserInput.getInputLine();
+        System.out.println("Please enter publisher name of the book");
+        String publisher = UserInput.getInputLine();
+        String sql = "insert into "+ table;
+        sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
+        sql += "'" + groupName + "'" +"," + "'"+title +"'"+","+"'"+publisher+"'"+","+year+","+page+")";
+        stmt = conn.createStatement();
+        stmt.executeUpdate( sql );
+    }
+    
+    public static String singleQuoteString(String s)
+    {
+        return "'" + s + "'";
     }
 }
 
