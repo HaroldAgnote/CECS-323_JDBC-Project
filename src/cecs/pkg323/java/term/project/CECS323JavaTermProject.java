@@ -1,12 +1,22 @@
 package cecs.pkg323.java.term.project;
 
 import java.sql.*;
-import java.time.Year;
 import java.util.*;
-import java.util.Date;
 
 /**
- * @author Mimi Opkins with some tweaking from Dave Brown
+ *
+ * Harold Agnote
+ * Xinyi Chen
+ *
+ * Professor David Brown
+ *
+ * CECS 323 - Sec. 07
+ *
+ * 3/20/2017
+ *
+ * CECS 323 - JDBC roject
+ *
+ *
  */
 public class CECS323JavaTermProject
 {
@@ -268,15 +278,9 @@ public class CECS323JavaTermProject
                     colLength[ j ] = data.getColumnDisplaySize( rs.findColumn( data.getColumnName( j + 1 ) ) ) + 5;
                     rowData[ j ] = rs.getString( columns[ j ] );
                 }
-                for ( int k = 0; k < columns.length; k++ )
-                {
-                    System.out.print( String.format( "%-" + colLength[ k ] + "s", columns[ k ] ) );
-                }
+                displayFormattedArray( columns, colLength );
                 System.out.println( "\n" );
-                for ( int l = 0; l < columns.length; l++ )
-                {
-                    System.out.print( String.format( "%-" + colLength[ l ] + "s", rowData[ l ] ) );
-                }
+                displayFormattedArray( rowData, colLength );
                 System.out.println( "\n" );
                 rs.beforeFirst();
             }
@@ -426,6 +430,13 @@ public class CECS323JavaTermProject
         return writingGroups;
     }
     
+    public static void displayFormattedArray(String [] display, int [] format)
+    {
+        for (int i = 0; i < display.length; i++)
+        {
+            System.out.print( String.format( "%-" + format[i] + "s", display[i] ) );
+        }
+    }
     
     public static String singleQuoteString( String s )
     {
