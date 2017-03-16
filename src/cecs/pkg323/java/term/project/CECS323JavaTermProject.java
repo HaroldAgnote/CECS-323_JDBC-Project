@@ -1,5 +1,6 @@
 package cecs.pkg323.java.term.project;
 
+import java.awt.image.AreaAveragingScaleFilter;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -37,17 +38,43 @@ public class CECS323JavaTermProject {
             return input;
     }
     
+    public static void login()
+    {
+        System.out.println("Select Login Credentials: \n");
+        System.out.println("1. Harold Agnote");
+        System.out.println("2. Xinyi Chen");
+        
+        int choice = UserInput.getInt( 1, 2 );
+        
+        if (choice == 1)
+        {
+            USER = "admin";
+            PASS = "test";
+            DBNAME = "Term_Project";
+        }
+        else
+        {
+            USER = "ad";
+            PASS = "password";
+            DBNAME = "project1";
+        }
+        
+    }
+    
     public static void main(String[] args) {
         //Prompt the user for the database name, and the credentials.
         //If your database has no credentials, you can update this code to
         //remove that from the connection string.
         Scanner in = new Scanner(System.in);
+        /*
         System.out.print("Name of the database (not the user account): ");
         DBNAME = in.nextLine();
         System.out.print("Database user name: ");
         USER = in.nextLine();
         System.out.print("Database password: ");
         PASS = in.nextLine();
+        */
+        login();
         //Constructing the database URL connection string
         DB_URL = DB_URL + DBNAME + ";user="+ USER + ";password=" + PASS;
         Connection conn = null; //initialize the connection
@@ -72,7 +99,7 @@ public class CECS323JavaTermProject {
                     
                     switch ( menu )
                     {
-                        case 1: displayInformation( "WRITINGGROUPS", "GroupName", conn );
+                        case 1: displayWritingGroups(conn);
                                 break;
                         case 2: displayInformation( "PUBLISHERS", "PublisherName", conn );
                                 break;
@@ -160,39 +187,54 @@ public class CECS323JavaTermProject {
         return UserInput.getInt(1,7);
     }
     
-    public static void displayInformation(String table, String mainCol, Connection conn) throws SQLException
+    public static void displayWritingGroups(Connection conn) throws SQLException
     {
-        ArrayList <String> information = new ArrayList <String> ();
-        Statement stmt = null;
-        stmt = conn.createStatement();
+        String table = "WRITINGGROUPS";
+        String mainCol = "GROUPNAME";
+        ResultSet rs = displayInformation( table, mainCol, conn );
+        displayMore(table, mainCol, rs, conn);
+    }
+    
+    public static ResultSet displayInformation(String table, String mainCol, Connection conn) throws SQLException
+    {
         String sql = "SELECT " + mainCol + " FROM " + table;
         sql += "\nORDER BY " + mainCol;
-        ResultSet rs = stmt.executeQuery( sql );
+        PreparedStatement stmt = conn.prepareStatement( sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE );
+        ResultSet rs = stmt.executeQuery();
         System.out.println(mainCol);
         int i = 1;
         while (rs.next())
         {
             String info = rs.getString(mainCol);
-            information.add( info );
             System.out.println(i + ". " + info);
             i++;
             System.out.println();
         }
         System.out.println(i + 1 + ". Go Back\n");
-        
+        rs.beforeFirst();
+        return rs;
     }
     
-    public static void displayMore(String table, String mainCol, Connection conn)
+    public static void displayMore(String table, String mainCol, ResultSet rs, Connection conn) throws SQLException
     {
-        String sql;
+        ArrayList <String> information = new ArrayList <>(  );
+        String sql = "SELECT * FROM " + table;
+        sql += "\nWHERE " + mainCol + " = ?";
+        PreparedStatement stmt = conn.prepareStatement( sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE );
+        int i = 1;
+        while (rs.next())
+        {
+            String info = rs.getString(mainCol);
+            information.add( info );
+            i++;
+        }
         System.out.print("Select an entry to view more information about: " );
         int choice = UserInput.getInt( 1, i + 1 );
         if (choice < i + 1)
         {
             String info = information.get( choice - 1 );
-            sql = "SELECT * FROM " + table;
-            sql += "\nWHERE " + mainCol + " = '" + info + "'";
-            rs = stmt.executeQuery( sql );
+            stmt.setString(1, info);
+            rs = stmt.executeQuery();
             ResultSetMetaData data = rs.getMetaData();
             String [] columns = new String [data.getColumnCount()];
             String [] rowData = new String[columns.length];
