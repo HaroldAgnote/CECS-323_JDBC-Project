@@ -101,15 +101,15 @@ public class CECS323JavaTermProject {
                     {
                         case 1: displayWritingGroups(conn);
                                 break;
-                        case 2: displayInformation( "PUBLISHERS", "PublisherName", conn );
+                        case 2: displayPublishers(conn);
                                 break;
-                        case 3: displayInformation( "BOOKS", "BookTitle", conn );
+                        case 3: displayBook(conn);
                                 break;
                         case 4: insertBook( conn );
                                 break;
                         case 5: table = "PUBLISHER"; // TODO Add a Publisher/Update Books
                                 break;
-                        case 6: table = "BOOKS"; // TODO Remove a book
+                        case 6: table = "BOOKS"; // TODO Remove a book; Put Below Code in method
                                 displayInformation( "BOOKS", "BookTitle", conn );
                                 String bookname = "a"; //modify
                                 String sql = "delete from "+table + "where book.booktitle = " + singleQuoteString( bookname );
@@ -195,12 +195,29 @@ public class CECS323JavaTermProject {
         displayMore(table, mainCol, rs, conn);
     }
     
+    public static void displayPublishers(Connection conn) throws SQLException
+    {
+        String table = "PUBLISHERS";
+        String mainCol = "PUBLISHERNAME";
+        ResultSet rs = displayInformation( table, mainCol, conn );
+        displayMore(table, mainCol, rs, conn);
+    }
+    
+    public static void displayBook(Connection conn) throws SQLException
+    {
+        String table = "BOOKS";
+        String mainCol = "BOOKTITLE";
+        ResultSet rs = displayInformation( table, mainCol, conn );
+        displayMore(table, mainCol, rs, conn);
+    }
+    
     public static ResultSet displayInformation(String table, String mainCol, Connection conn) throws SQLException
     {
         String sql = "SELECT " + mainCol + " FROM " + table;
         sql += "\nORDER BY " + mainCol;
         PreparedStatement stmt = conn.prepareStatement( sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE );
         ResultSet rs = stmt.executeQuery();
+        ResultSetMetaData metaData = rs.getMetaData();
         System.out.println(mainCol);
         int i = 1;
         while (rs.next())
@@ -258,7 +275,7 @@ public class CECS323JavaTermProject {
     
     public static void insertBook(Connection conn) throws SQLException
     {
-        Statement stmt = null;
+        Statement stmt = null;  // TODO: Change to Prepared Statement
         String table = "BOOKS";
         System.out.println("Please enter book title");
         String title = UserInput.getInputLine();
