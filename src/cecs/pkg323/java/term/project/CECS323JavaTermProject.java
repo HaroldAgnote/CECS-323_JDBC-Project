@@ -2,7 +2,6 @@ package cecs.pkg323.java.term.project;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * @author Mimi Opkins with some tweaking from Dave Brown
@@ -226,7 +225,7 @@ public class CECS323JavaTermProject
             i++;
             System.out.println();
         }
-        System.out.println( i + 1 + ". Go Back\n" );
+        System.out.println( i + ". Go Back\n" );
         rs.beforeFirst();
         return rs;
     }
@@ -248,7 +247,7 @@ public class CECS323JavaTermProject
         
         System.out.print( "Select an entry to view more information about: " );
         int choice = UserInput.getInt( 1, i + 1 );
-        if ( choice < i + 1 )
+        if ( choice < i )
         {
             String info = information.get( choice - 1 );
             stmt.setString( 1, info );
