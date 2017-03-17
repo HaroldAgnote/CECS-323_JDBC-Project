@@ -305,7 +305,8 @@ public class CECS323JavaTermProject
     public static void insertBook( Connection conn ) throws SQLException
     {
         HashSet <String> publisher_Book = getPublisherBookPair( conn );
-    
+        HashSet <String> group_Book = getGroupNameBookPair( conn );
+        
         String bookTitle = setBookTitle();
         String groupName = setWritingGroup( conn );
         String publisherName = setPublisher(conn);
@@ -316,11 +317,24 @@ public class CECS323JavaTermProject
         String table = "BOOKS";
         
         String publisher_Book_Pair = publisherName + "_" + bookTitle;
+        String group_Book_Pair = groupName + "_" + bookTitle;
         
         while (publisher_Book.contains( publisher_Book_Pair ))
         {
-            System.out.println("The database already contains: ");
-            System.out.println(bookTitle + " that's been published by " + publisherName);
+            System.out.println("The database already contains an entry with: ");
+            System.out.println("Book Title: " + bookTitle);
+            System.out.println("Publisher: " + publisherName);
+            System.out.println("Please change either attribute to proceed with adding this Book");
+            bookTitle = setBookTitle();
+            publisherName = setPublisher( conn );
+            publisher_Book_Pair = publisherName + "_" + bookTitle;
+        }
+    
+        while (group_Book.contains( group_Book_Pair))
+        {
+            System.out.println("The database already contains an entry with: ");
+            System.out.println("Book Title: " + bookTitle);
+            System.out.println("Writing Group: " + groupName);
             System.out.println("Please change either attribute to proceed with adding this Book");
             bookTitle = setBookTitle();
             publisherName = setPublisher( conn );
@@ -338,12 +352,39 @@ public class CECS323JavaTermProject
         System.out.printf( displayFormat, "Number of Pages", dispNull( Integer.toString( pages ) ) );
     
         System.out.println("");
-        
+    
         String sql = "INSERT INTO " + table;
-        sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
-        sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + year + "," + pages + ")";
-        stmt = conn.createStatement();
-        stmt.executeUpdate( sql );
+        
+        if (year == -1 && pages != -1)
+        {
+            sql += "(groupName, bookTitle,publisherName, numberOfPages) values(";
+            sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + ","  + pages + ")";
+            stmt = conn.createStatement();
+            stmt.executeUpdate( sql );
+        }
+        else if (year != -1 && pages == -1)
+        {
+            sql += "(groupName, bookTitle,publisherName,yearPublished) values(";
+            sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + year + ")";
+            stmt = conn.createStatement();
+            stmt.executeUpdate( sql );
+        }
+        else if (year == -1 && pages == -1)
+        {
+            sql += "(groupName, bookTitle,publisherName) values(";
+            sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + ")";
+            stmt = conn.createStatement();
+            stmt.executeUpdate( sql );
+        }
+        else
+        {
+            sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
+            sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + year + "," + pages + ")";
+            stmt = conn.createStatement();
+            stmt.executeUpdate( sql );
+        }
+        
+        
     }
     
     public static String setBookTitle()
@@ -556,6 +597,23 @@ public class CECS323JavaTermProject
         }
         
         return publisher_Book;
+    }
+    
+    public static HashSet <String> getGroupNameBookPair(Connection conn) throws SQLException
+    {
+        HashSet <String> group_Book = new HashSet <>(  );
+        String sql = "SELECT GROUPNAME, BOOKTITLE FROM BOOKS";
+        PreparedStatement stmt = conn.prepareStatement( sql );
+        ResultSet rs = stmt.executeQuery(  );
+        
+        while (rs.next() )
+        {
+            String publisher = rs.getString( "GROUPNAME" );
+            String book = rs.getString("BOOKTITLE");
+            group_Book.add( publisher + "_" + book );
+        }
+        
+        return group_Book;
     }
     
     public static void displayFormattedArray(String [] display, int [] format)
