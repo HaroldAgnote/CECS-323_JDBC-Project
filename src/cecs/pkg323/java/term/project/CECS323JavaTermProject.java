@@ -77,7 +77,7 @@ public class CECS323JavaTermProject
                             HashSet <String> books = getBooks(conn);
                             table = "BOOKS";
                             String bookTitle;
-                               do
+                               do 
                                { 
                                    System.out.println( "Please enter the name of the book that you want to delete" );
                                    bookTitle = UserInput.getInputLine();
