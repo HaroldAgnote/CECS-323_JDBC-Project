@@ -100,7 +100,7 @@ public class CECS323JavaTermProject
                                while ( true );
                                String sql = "delete from " + table + " where books.booktitle = " + singleQuoteString( bookTitle );
                                PreparedStatement pstmt = conn.prepareStatement(sql);
-                                
+                               pstmt.execute();
                             break;
                     }
                 }
@@ -269,7 +269,6 @@ public class CECS323JavaTermProject
             i++;
             System.out.println();
         }
-        System.out.println( i + ". Go Back\n" );
         rs.beforeFirst();
         return rs;
     }
@@ -287,6 +286,7 @@ public class CECS323JavaTermProject
             information.add( info );
             i++;
         }
+        System.out.println( i + ". Go Back\n" );
         int choice = 0;
         do
         {
