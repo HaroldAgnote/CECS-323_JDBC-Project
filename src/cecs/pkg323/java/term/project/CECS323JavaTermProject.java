@@ -304,106 +304,78 @@ public class CECS323JavaTermProject
      */
     public static void insertBook( Connection conn ) throws SQLException
     {
-        final int currentYear = (Calendar.getInstance()).get( Calendar.YEAR );
-        
-        HashSet <String> publishers = getPublishers( conn );
-        HashSet <String> writingGroups = getWritingGroups( conn );
+        HashSet <String> publisher_Book = getPublisherBookPair( conn );
     
-        String groupName;
-        String title;
-        String publisherName;
-        int year = 0;
-        int pages = 0;
+        String bookTitle = setBookTitle();
+        String groupName = setWritingGroup( conn );
+        String publisherName = setPublisher(conn);
+        int year = setYear();
+        int pages = setPages();
         
-        boolean valid = false;
         Statement stmt = null;  // TODO: Change to Prepared Statement
         String table = "BOOKS";
+        
+        String publisher_Book_Pair = publisherName + "_" + bookTitle;
+        
+        while (publisher_Book.contains( publisher_Book_Pair ))
+        {
+            System.out.println("The database already contains: ");
+            System.out.println(bookTitle + " that's been published by " + publisherName);
+            System.out.println("Please change either attribute to proceed with adding this Book");
+            bookTitle = setBookTitle();
+            publisherName = setPublisher( conn );
+            publisher_Book_Pair = publisherName + "_" + bookTitle;
+        }
+        
+        boolean confirm = false;
+    
+        String displayFormat = "%-20s: %-20s\n";
+        System.out.println("Here's the information you want to put in: ");
+        System.out.printf(displayFormat, "Group Name", groupName);
+        System.out.printf(displayFormat, "Book Title", bookTitle);
+        System.out.printf( displayFormat, "Publisher", publisherName );
+        System.out.printf( displayFormat, "Year Published", dispNull( Integer.toString(year )) );
+        System.out.printf( displayFormat, "Number of Pages", dispNull( Integer.toString( pages ) ) );
+    
+        System.out.println("");
+        
+        String sql = "INSERT INTO " + table;
+        sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
+        sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + year + "," + pages + ")";
+        stmt = conn.createStatement();
+        stmt.executeUpdate( sql );
+    }
+    
+    public static String setBookTitle()
+    {
+        String bookTitle;
+        boolean valid = false;
         do
         {
             System.out.print( "Book Title: " );
-            title = UserInput.getInputLine();
-            if (title.trim().isEmpty())
+            bookTitle = UserInput.getInputLine();
+            if (bookTitle.trim().isEmpty())
             {
                 System.out.println("Title cannot be Empty");
             }
-            else if (title.length() > 50)
+            else if (bookTitle.length() > 50)
             {
                 System.out.println("Title is too long");
             }
-            else 
-            {
-                break;
-            }
-        }
-        while ( true );
-        do
-        {
-            System.out.println( "(Press Enter to Skip)" );
-            System.out.print("Year Published: ");
-            try
-            {
-                String input = UserInput.getInputLine();
-                if (!(input.trim().isEmpty()))
-                {
-                    year = Integer.parseInt( input );
-                }
-                else
-                {
-                    year= -1;
-                    break;
-                }
-            }
-            catch ( NumberFormatException ime )
-            {
-                System.out.println("Not an Integer");
-            }
-            if (year > currentYear)
-            {
-                System.out.println("This book can't be published in the future");
-            }
-            else if (year != -1 && year < 1900 )
-            {
-                System.out.println("Please enter a year after the 1900's");
-            }
             else
             {
-                break;
+                valid = true;
             }
         }
-        while ( true );
-        
-        do
-        {
-            System.out.println( "(Press Enter to Skip)" );
-            System.out.print("Number of Pages: ");
-            try
-            {
-                String input = UserInput.getInputLine();
-                if (!(input.trim().isEmpty()))
-                {
-                    pages = Integer.parseInt( input );
-                }
-                else
-                {
-                    pages = -1;
-                    break;
-                }
-            }
-            catch ( NumberFormatException ime )
-            {
-                System.out.println("Not an Integer");
-            }
-            if (pages == -1  || pages > 0)
-            {
-                break;
-            }
-            else
-            {
-                System.out.println("Invalid number of pages");
-            }
-        }
-        while ( true );
-        
+        while ( !valid );
+        return bookTitle;
+    }
+    
+    public static String setWritingGroup(Connection conn) throws SQLException
+    {
+        HashSet <String> writingGroups = getWritingGroups( conn );
+        boolean valid = false;
+        String groupName;
         do
         {
             System.out.println( "Please enter the writer group's name of the book" );
@@ -420,11 +392,19 @@ public class CECS323JavaTermProject
             }
             else
             {
-                break;
+                valid = true;
             }
         }
-        while ( true );
-        
+        while ( !valid );
+        return groupName;
+    }
+    
+    public static String setPublisher(Connection conn) throws SQLException
+    {
+        HashSet <String> publishers = getPublishers( conn );
+        boolean valid = false;
+        String publisherName;
+    
         do
         {
             System.out.println( "Please enter publisher name of the book" );
@@ -441,31 +421,93 @@ public class CECS323JavaTermProject
             }
             else
             {
-                break;
+                valid = true;
             }
         }
-        while ( true );
+        while ( !valid );
         
-        boolean confirm = false;
-    
-        String displayFormat = "%-20s: %-20s\n";
-        System.out.println("Here's the information you want to put in: ");
-        System.out.printf(displayFormat, "Group Name", groupName);
-        System.out.printf(displayFormat, "Book Title", title);
-        System.out.printf( displayFormat, "Publisher", publisherName );
-        System.out.printf( displayFormat, "Year Published", dispNull( Integer.toString(year )) );
-        System.out.printf( displayFormat, "Number of Pages", dispNull( Integer.toString( pages ) ) );
-    
-        System.out.println("");
-        
-        String sql = "INSERT INTO " + table;
-        sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
-        sql += singleQuoteString( groupName ) + "," + singleQuoteString( title ) + "," + singleQuoteString( publisherName ) + "," + year + "," + pages + ")";
-        stmt = conn.createStatement();
-        stmt.executeUpdate( sql );
+        return publisherName;
     }
     
+    public static int setYear()
+    {
+        final int currentYear = (Calendar.getInstance()).get( Calendar.YEAR );
+        boolean valid = false;
+        int year = 0;
+        
+        do
+        {
+            System.out.println( "(Press Enter to Skip)" );
+            System.out.print("Year Published: ");
+            try
+            {
+                String input = UserInput.getInputLine();
+                if (!(input.trim().isEmpty()))
+                {
+                    year = Integer.parseInt( input );
+                }
+                else
+                {
+                    year= -1;
+                }
+            }
+            catch ( NumberFormatException ime )
+            {
+                System.out.println("Not an Integer");
+            }
+            if (year > currentYear)
+            {
+                System.out.println("This book can't be published in the future");
+            }
+            else if (year != -1 && year < 1900 )
+            {
+                System.out.println("Please enter a year after the 1900's");
+            }
+            else
+            {
+                valid = true;
+            }
+        }
+        while ( !valid );
+        return year;
+    }
     
+    public static int setPages()
+    {
+        boolean valid = false;
+        int pages = 0;
+        do
+        {
+            System.out.println( "(Press Enter to Skip)" );
+            System.out.print("Number of Pages: ");
+            try
+            {
+                String input = UserInput.getInputLine();
+                if (!(input.trim().isEmpty()))
+                {
+                    pages = Integer.parseInt( input );
+                }
+                else
+                {
+                    pages = -1;
+                }
+            }
+            catch ( NumberFormatException ime )
+            {
+                System.out.println("Not an Integer");
+            }
+            if (pages == -1  || pages > 0)
+            {
+                valid = true;
+            }
+            else
+            {
+                System.out.println("Invalid number of pages");
+            }
+        }
+        while ( !valid );
+        return pages;
+    }
     
     public static HashSet <String> getPublishers(Connection conn) throws SQLException
     {
