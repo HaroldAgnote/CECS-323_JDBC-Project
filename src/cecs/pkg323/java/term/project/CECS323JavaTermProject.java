@@ -78,7 +78,7 @@ public class CECS323JavaTermProject
                             table = "BOOKS";
                             String bookTitle;
                                do
-                               {
+                               { 
                                    System.out.println( "Please enter the name of the book that you want to delete" );
                                    bookTitle = UserInput.getInputLine();
                                    if (bookTitle.trim().isEmpty())
