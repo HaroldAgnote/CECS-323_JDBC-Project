@@ -318,9 +318,9 @@ public class CECS323JavaTermProject
         boolean valid = false;
         Statement stmt = null;  // TODO: Change to Prepared Statement
         String table = "BOOKS";
-        System.out.print( "Please Enter Book Title: " );
         do
         {
+            System.out.print( "Book Title: " );
             title = UserInput.getInputLine();
             if (title.trim().isEmpty())
             {
@@ -338,14 +338,14 @@ public class CECS323JavaTermProject
         while ( true );
         do
         {
-            System.out.println( "Please enter book year published (Press Enter to Skip)" );
+            System.out.println( "(Press Enter to Skip)" );
+            System.out.print("Year Published: ");
             try
             {
                 String input = UserInput.getInputLine();
                 if (!(input.trim().isEmpty()))
                 {
                     year = Integer.parseInt( input );
-                    
                 }
                 else
                 {
@@ -374,7 +374,8 @@ public class CECS323JavaTermProject
         
         do
         {
-            System.out.println( "Please enter total number of pages the book has" );
+            System.out.println( "(Press Enter to Skip)" );
+            System.out.print("Number of Pages: ");
             try
             {
                 String input = UserInput.getInputLine();
@@ -392,12 +393,17 @@ public class CECS323JavaTermProject
             {
                 System.out.println("Not an Integer");
             }
-            if (pages == -1 )
+            if (pages == -1  || pages > 0)
             {
                 break;
             }
+            else
+            {
+                System.out.println("Invalid number of pages");
+            }
         }
         while ( true );
+        
         do
         {
             System.out.println( "Please enter the writer group's name of the book" );
@@ -439,7 +445,20 @@ public class CECS323JavaTermProject
             }
         }
         while ( true );
-        String sql = "insert into " + table;
+        
+        boolean confirm = false;
+    
+        String displayFormat = "%-20s: %-20s\n";
+        System.out.println("Here's the information you want to put in: ");
+        System.out.printf(displayFormat, "Group Name", groupName);
+        System.out.printf(displayFormat, "Book Title", title);
+        System.out.printf( displayFormat, "Publisher", publisherName );
+        System.out.printf( displayFormat, "Year Published", dispNull( Integer.toString(year )) );
+        System.out.printf( displayFormat, "Number of Pages", dispNull( Integer.toString( pages ) ) );
+    
+        System.out.println("");
+        
+        String sql = "INSERT INTO " + table;
         sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
         sql += singleQuoteString( groupName ) + "," + singleQuoteString( title ) + "," + singleQuoteString( publisherName ) + "," + year + "," + pages + ")";
         stmt = conn.createStatement();
@@ -468,8 +487,8 @@ public class CECS323JavaTermProject
     {
         HashSet <String> writingGroups = new HashSet<>(  );
         String sql = "SELECT GROUPNAME FROM WRITINGGROUPS";
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery( sql );
+        PreparedStatement stmt = conn.prepareStatement( sql );
+        ResultSet rs = stmt.executeQuery();
     
         while ( rs.next() )
         {
@@ -478,6 +497,23 @@ public class CECS323JavaTermProject
         }
     
         return writingGroups;
+    }
+    
+    public static HashSet <String> getPublisherBookPair(Connection conn) throws SQLException
+    {
+        HashSet <String> publisher_Book = new HashSet <>(  );
+        String sql = "SELECT PUBLISHERNAME, BOOKTITLE FROM BOOKS";
+        PreparedStatement stmt = conn.prepareStatement( sql );
+        ResultSet rs = stmt.executeQuery(  );
+        
+        while (rs.next() )
+        {
+            String publisher = rs.getString( "PUBLISHERNAME" );
+            String book = rs.getString("BOOKTITLE");
+            publisher_Book.add( publisher + "_" + book );
+        }
+        
+        return publisher_Book;
     }
     
     public static void displayFormattedArray(String [] display, int [] format)
