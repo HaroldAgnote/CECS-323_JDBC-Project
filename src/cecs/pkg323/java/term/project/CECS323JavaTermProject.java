@@ -98,8 +98,9 @@ public class CECS323JavaTermProject
                                    }
                                }
                                while ( true );
-                               String sql = "delete from " + table + "where books.booktitle = " + singleQuoteString( bookTitle )+";";
+                               String sql = "delete from " + table + " where books.booktitle = " + singleQuoteString( bookTitle )+";";
                                PreparedStatement pstmt = conn.prepareStatement(sql);
+                                
                             break;
                     }
                 }
