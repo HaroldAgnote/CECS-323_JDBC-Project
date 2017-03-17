@@ -141,10 +141,18 @@ public class CECS323JavaTermProject
         {
             return "N/A";
         }
-        else
+        try
         {
-            return input;
+            if (Integer.parseInt( input ) == -1)
+            {
+                return "N/A";
+            }
         }
+        catch ( NumberFormatException nfe )
+        {
+            
+        }
+        return input;
     }
     
     //Prompt the user for the database name, and the credentials.
@@ -304,8 +312,8 @@ public class CECS323JavaTermProject
         String groupName;
         String title;
         String publisherName;
-        int year;
-        int pages;
+        int year = 0;
+        int pages = 0;
         
         boolean valid = false;
         Statement stmt = null;  // TODO: Change to Prepared Statement
@@ -330,13 +338,30 @@ public class CECS323JavaTermProject
         while ( true );
         do
         {
-            System.out.println( "Please enter book year published" );
-            year = UserInput.getInt();
+            System.out.println( "Please enter book year published (Press Enter to Skip)" );
+            try
+            {
+                String input = UserInput.getInputLine();
+                if (!(input.trim().isEmpty()))
+                {
+                    year = Integer.parseInt( input );
+                    
+                }
+                else
+                {
+                    year= -1;
+                    break;
+                }
+            }
+            catch ( NumberFormatException ime )
+            {
+                System.out.println("Not an Integer");
+            }
             if (year > currentYear)
             {
                 System.out.println("This book can't be published in the future");
             }
-            else if (year < 1900)
+            else if (year != -1 && year < 1900 )
             {
                 System.out.println("Please enter a year after the 1900's");
             }
@@ -346,8 +371,33 @@ public class CECS323JavaTermProject
             }
         }
         while ( true );
-        System.out.println( "Please enter total number of pages the book has" );
-        pages = UserInput.getInt();
+        
+        do
+        {
+            System.out.println( "Please enter total number of pages the book has" );
+            try
+            {
+                String input = UserInput.getInputLine();
+                if (!(input.trim().isEmpty()))
+                {
+                    pages = Integer.parseInt( input );
+                }
+                else
+                {
+                    pages = -1;
+                    break;
+                }
+            }
+            catch ( NumberFormatException ime )
+            {
+                System.out.println("Not an Integer");
+            }
+            if (pages == -1 )
+            {
+                break;
+            }
+        }
+        while ( true );
         do
         {
             System.out.println( "Please enter the writer group's name of the book" );
@@ -434,7 +484,7 @@ public class CECS323JavaTermProject
     {
         for (int i = 0; i < display.length; i++)
         {
-            System.out.print( String.format( "%-" + format[i] + "s", display[i] ) );
+            System.out.print( String.format( "%-" + format[i] + "s", dispNull((display[i] ))));
         }
     }
     
