@@ -71,12 +71,35 @@ public class CECS323JavaTermProject
                             break;
                         case 5:
                             table = "PUBLISHER"; // TODO Add a Publisher/Update Books
+                            
                             break;
                         case 6:
-                            table = "BOOKS"; // TODO Remove a book; Put Below Code in method
-                            displayInformation( "BOOKS", "BookTitle", conn );
-                            String bookname = "a"; //modify
-                            String sql = "delete from " + table + "where book.booktitle = " + singleQuoteString( bookname );
+                            HashSet <String> books = getBooks(conn);
+                            table = "BOOKS";
+                            String bookTitle;
+                               do
+                               {
+                                   System.out.println( "Please enter the name of the book that you want to delete" );
+                                   bookTitle = UserInput.getInputLine();
+                                   if (bookTitle.trim().isEmpty())
+                                   {
+                                       System.out.println("Book Name cannot be empty");
+                                   }
+                                   else if (!books.contains( bookTitle ))
+                                   {
+                                       System.out.println("here");
+                                       System.out.println(bookTitle + " does not exist in Books");
+                                       System.out.println("Please enter an existing books from the list:");
+                                       displayInformation( "BOOKS", "BOOKTITLE", conn );
+                                   }
+                                   else
+                                   {
+                                       break;
+                                   }
+                               }
+                               while ( true );
+                               String sql = "delete from " + table + "where books.booktitle = " + singleQuoteString( bookTitle )+";";
+                               PreparedStatement pstmt = conn.prepareStatement(sql);
                             break;
                     }
                 }
@@ -381,6 +404,7 @@ public class CECS323JavaTermProject
                 if (!(input.trim().isEmpty()))
                 {
                     pages = Integer.parseInt( input );
+                    break;
                 }
                 else
                 {
@@ -442,8 +466,7 @@ public class CECS323JavaTermProject
         String sql = "insert into " + table;
         sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
         sql += singleQuoteString( groupName ) + "," + singleQuoteString( title ) + "," + singleQuoteString( publisherName ) + "," + year + "," + pages + ")";
-        stmt = conn.createStatement();
-        stmt.executeUpdate( sql );
+        PreparedStatement pstmt = conn.prepareStatement(sql);
     }
     
     
@@ -463,7 +486,20 @@ public class CECS323JavaTermProject
         
         return publishers;
     }
-    
+    public static HashSet <String> getBooks(Connection conn) throws SQLException
+    {
+        HashSet <String> books = new HashSet<>();
+        String sql = "SELECT BOOKTITLE FROM BOOKS";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        
+        while (rs.next())
+        {
+            String name = rs.getString("BOOKTITLE");
+            books.add(name);
+        }
+        return books;
+    }
     public static HashSet <String> getWritingGroups(Connection conn) throws SQLException
     {
         HashSet <String> writingGroups = new HashSet<>(  );
