@@ -74,33 +74,7 @@ public class CECS323JavaTermProject
                             
                             break;
                         case 6:
-                            HashSet <String> books = getBooks(conn);
-                            table = "BOOKS";
-                            String bookTitle;
-                               do 
-                               { 
-                                   System.out.println( "Please enter the name of the book that you want to delete" );
-                                   bookTitle = UserInput.getInputLine();
-                                   if (bookTitle.trim().isEmpty())
-                                   {
-                                       System.out.println("Book Name cannot be empty");
-                                   }
-                                   else if (!books.contains( bookTitle ))
-                                   {
-                                       System.out.println("here");
-                                       System.out.println(bookTitle + " does not exist in Books");
-                                       System.out.println("Please enter an existing books from the list:");
-                                       displayInformation( "BOOKS", "BOOKTITLE", conn );
-                                   }
-                                   else
-                                   {
-                                       break;
-                                   }
-                               }
-                               while ( true );
-                               String sql = "delete from " + table + " where books.booktitle = " + singleQuoteString( bookTitle );
-                               PreparedStatement pstmt = conn.prepareStatement(sql);
-                               pstmt.execute();
+                            removeBook( conn );
                             break;
                     }
                 }
@@ -572,6 +546,31 @@ public class CECS323JavaTermProject
         }
         while ( !valid );
         return pages;
+    }
+    
+    public static void removeBook(Connection conn) throws SQLException
+    {
+        HashSet <String> books = getBooks(conn);
+        String bookTitle;
+        boolean valid = false;
+        do
+        {
+            bookTitle = setBookTitle();
+            if (!books.contains( bookTitle ))
+            {
+                System.out.println(bookTitle + " does not exist in Books");
+                System.out.println("Please enter an existing books from the list:");
+                displayInformation( "BOOKS", "BOOKTITLE", conn );
+            }
+            else
+            {
+                valid = true;
+            }
+        }
+        while ( !valid );
+        String sql = "DELETE FROM BOOKS WHERE BOOKS.BOOKTITLE = " + singleQuoteString( bookTitle );
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.execute();
     }
     
     public static HashSet <String> getPublishers(Connection conn) throws SQLException
