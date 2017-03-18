@@ -344,8 +344,8 @@ public class CECS323JavaTermProject
                 System.out.println( "Writing Group: " + groupName );
                 System.out.println( "Please change either attribute to proceed with adding this Book" );
                 bookTitle = setBookTitle();
-                publisherName = setPublisher( conn );
-                publisher_Book_Pair = publisherName + "_" + bookTitle;
+                groupName = setWritingGroup( conn );
+                group_Book_Pair = groupName + "_" + bookTitle;
             }
     
             String displayFormat = "%-20s: %-20s\n";
@@ -487,7 +487,6 @@ public class CECS323JavaTermProject
                 if ( publisherEmail.length() > 30 )
                 {
                     System.out.println( "Publisher email is too long, try again" );
-                    publisherEmail = UserInput.getInput();
                 }
                 else
                 {
@@ -599,7 +598,13 @@ public class CECS323JavaTermProject
             System.out.println( "Enter Nothing to cancel Operation" );
             System.out.print( "Book Title: " );
             bookTitle = UserInput.getInputLine();
-            if ( !books.contains( bookTitle ) && !bookTitle.trim().isEmpty() )
+            if(bookTitle.length()>50)
+            {
+                System.out.println("Book Title is too long Try again");
+            }
+            else
+            {
+                if ( !books.contains( bookTitle ) && !bookTitle.trim().isEmpty() )
             {
                 System.out.println( bookTitle + " does not exist in Books" );
                 System.out.println( "Please enter an existing books from the list:\n" );
@@ -609,6 +614,8 @@ public class CECS323JavaTermProject
             {
                 valid = true;
             }
+            }
+            
         }
         while ( !valid );
         
