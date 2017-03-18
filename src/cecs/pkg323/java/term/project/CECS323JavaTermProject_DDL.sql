@@ -60,7 +60,7 @@ insert into WritingGroups(groupName, headWriter, yearFormed) values ('Deluxe Boo
 /*headWriter and subject are null*/
 insert into WritingGroups(groupName, yearFormed) values ('Bixby Writing Center',2005);
 /*headWriter and yearFormed being null*/
-insert into Writing Groups(groupName, subject) values ('Senior Writers', 'All Genres');
+insert into WritingGroups(groupName, subject) values ('Senior Writers', 'All Genres');
 
 
 insert into publishers
@@ -78,7 +78,7 @@ insert into publishers (publisherName) values('JFK Publish Center');
 insert into publishers (publisherName, publisherAddress) values ('ABC Books','232 Orange Ave');
 
 /*address null*/
-insert into publishers (publisherName, publisherPhone, publisherEmail) values ('Child Development Association','666-573-5555','childdev.assiociation@yahoo.com');
+insert into publishers (publisherName, publisherPhone, publisherEmail) values ('Child Development Association','666-573-5555','childdev@yahoo.com');
 
 /*address, email null*/
 insert into publishers (publisherName, publisherPhone) values ('McGraw-Hill Education','800-666-8888');
