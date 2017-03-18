@@ -70,7 +70,7 @@ public class CECS323JavaTermProject
                             insertBook( conn );
                             break;
                         case 5:
-                            table = "PUBLISHER"; // TODO Add a Publisher/Update Books
+                            table = "PUBLISHERS"; // TODO Add a Publisher/Update Books
                             System.out.println("Please enter the new publisher's name");
                             String publisherName = UserInput.getInputLine();
                             System.out.println("Please enter the new publisher's address");
