@@ -27,16 +27,16 @@ Tasks:
 
  * Harold:
     
-   - Finish implementation of listing table data
+ * [X] Finish implementation of listing table data
    
-   - ~~Encapusulate listing of data into methods~~
+ * [X] Encapusulate listing of data into methods
     
-   - Fix any syntax or aesthetic issues
+ * [ ] Fix any syntax or aesthetic issues
 
 
  * Xinyi:
 
-   - Implement adding/removing Books from Database
+ * [X] Implement adding/removing Books from Database
    
-   - Implement adding publisher and updating Books
+ * [X] Implement adding publisher and updating Books
 

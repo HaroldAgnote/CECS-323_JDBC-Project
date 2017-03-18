@@ -494,6 +494,71 @@ public class CECS323JavaTermProject
         }
     }
     
+    public static void removeBook( Connection conn ) throws SQLException
+    {
+        PreparedStatement pstmt = null;
+        String viewBookSql = "SELECT * FROM BOOKS WHERE BOOKS.BOOKTITLE = ?";
+        String deleteBookSql = "DELETE FROM BOOKS WHERE BOOKS.BOOKTITLE = ?";
+        pstmt = conn.prepareStatement( viewBookSql );
+        HashSet < String > books = getBooks( conn );
+        String bookTitle;
+        boolean valid = false;
+        
+        String groupName = "";
+        String publisherName = "";
+        String yearPublished = "";
+        String numberOfPages = "";
+        
+        do
+        {
+            bookTitle = UserInput.getInputLine();
+            if ( !books.contains( bookTitle ) && !bookTitle.trim().isEmpty() )
+            {
+                System.out.println( bookTitle + " does not exist in Books" );
+                System.out.println( "Please enter an existing books from the list:" );
+                displayInformation( "BOOKS", "BOOKTITLE", conn );
+            }
+            else
+            {
+                valid = true;
+            }
+        }
+        while ( !valid );
+        
+        if ( !bookTitle.trim().isEmpty() )
+        {
+            pstmt.setString( 1, bookTitle );
+            ResultSet rs = pstmt.executeQuery();
+            
+            while ( rs.next() )
+            {
+                groupName = rs.getString( "GROUPNAME" );
+                publisherName = rs.getString( "PUBLISHERNAME" );
+                yearPublished = rs.getString( "YEARPUBLISHED" );
+                numberOfPages = rs.getString( "NUMBEROFPAGES" );
+            }
+            
+            String displayFormat = "%-20s: %-20s\n";
+            System.out.println( "This is the Book you want to remove: " );
+            System.out.printf( displayFormat, "Group Name", groupName );
+            System.out.printf( displayFormat, "Book Title", bookTitle );
+            System.out.printf( displayFormat, "Publisher", publisherName );
+            System.out.printf( displayFormat, "Year Published", dispNull( yearPublished ) );
+            System.out.printf( displayFormat, "Number of Pages", dispNull( numberOfPages ) );
+            
+            System.out.println( "Do you want to remove this Book? (Y/N)" );
+            
+            boolean yesNo = UserInput.getYesNo();
+            
+            if ( yesNo )
+            {
+                pstmt = conn.prepareStatement( deleteBookSql );
+                pstmt.setString( 1, bookTitle );
+                pstmt.execute();
+            }
+        }
+    }
+    
     public static String setBookTitle()
     {
         String bookTitle;
@@ -655,7 +720,7 @@ public class CECS323JavaTermProject
                 System.out.println("Not an Integer");
             }
             if (pages == -1  || pages > 0)
-            { 
+            {
                 valid = true;
             }
             else
@@ -665,31 +730,6 @@ public class CECS323JavaTermProject
         }
         while ( !valid );
         return pages;
-    }
-    
-    public static void removeBook(Connection conn) throws SQLException
-    {
-        HashSet <String> books = getBooks(conn);
-        String bookTitle;
-        boolean valid = false;
-        do
-        {
-            bookTitle = setBookTitle();
-            if (!books.contains( bookTitle ))
-            {
-                System.out.println(bookTitle + " does not exist in Books");
-                System.out.println("Please enter an existing books from the list:");
-                displayInformation( "BOOKS", "BOOKTITLE", conn );
-            }
-            else
-            {
-                valid = true;
-            }
-        }
-        while ( !valid );
-        String sql = "DELETE FROM BOOKS WHERE BOOKS.BOOKTITLE = " + singleQuoteString( bookTitle );
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.execute();
     }
     
     public static HashSet <String> getPublishers(Connection conn) throws SQLException
