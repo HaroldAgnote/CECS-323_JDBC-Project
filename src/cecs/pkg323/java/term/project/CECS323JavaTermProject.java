@@ -85,14 +85,17 @@ public class CECS323JavaTermProject
                             String oldName = UserInput.getInputLine();
                             
                             String sql = "INSERT INTO "+table+ " (publisherName, publisherAddress,publisherPhone,publisherEmail) values(";
-                            sql +=  singleQuoteString(publisherName) +","+singleQuoteString(publisherAddress)+","+singleQuoteString(publisherPhone)+","+singleQuoteString(publisherEmail);
+                            sql +=  singleQuoteString(publisherName) +","+singleQuoteString(publisherAddress)+","+singleQuoteString(publisherPhone)+","+singleQuoteString(publisherEmail) + ")";
                             PreparedStatement pstmt = conn.prepareStatement(sql);
+                            pstmt.executeUpdate();
                             
                             String sql2 = "Update Books set books.publishername = "+singleQuoteString(publisherName)+" where books.publisherName = "+singleQuoteString(oldName);
                             pstmt = conn.prepareStatement(sql2);
+                            pstmt.executeUpdate();
                             
                             String sql3 = "DELETE FROM "+table+" where publisherName = "+singleQuoteString(oldName);
                             pstmt = conn.prepareStatement(sql3);
+                            pstmt.execute();
                             break;
                         case 6:
                             removeBook( conn );
