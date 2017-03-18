@@ -91,7 +91,7 @@ public class CECS323JavaTermProject
                             String sql2 = "Update Books set books.publishername = "+singleQuoteString(publisherName)+" where books.publisherName = "+singleQuoteString(oldName);
                             pstmt = conn.prepareStatement(sql2);
                             
-                            String sql3 = "DELETE FROM "+singleQuoteString(table)+" where publisherName = "+oldName;
+                            String sql3 = "DELETE FROM "+table+" where publisherName = "+singleQuoteString(oldName);
                             pstmt = conn.prepareStatement(sql3);
                             break;
                         case 6:
