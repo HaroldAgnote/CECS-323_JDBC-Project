@@ -394,83 +394,103 @@ public class CECS323JavaTermProject
      */
     public static void insertBook( Connection conn ) throws SQLException
     {
-        HashSet <String> publisher_Book = getPublisherBookPair( conn );
-        HashSet <String> group_Book = getGroupNameBookPair( conn );
-        
-        String bookTitle = setBookTitle();
-        String groupName = setWritingGroup( conn );
-        String publisherName = setPublisher(conn);
-        int year = setYear();
-        int pages = setPages();
-        
-        PreparedStatement pstmt = null;  // TODO: Change to Prepared Statement
         String table = "BOOKS";
-        
-        String publisher_Book_Pair = publisherName + "_" + bookTitle;
-        String group_Book_Pair = groupName + "_" + bookTitle;
-        
-        while (publisher_Book.contains( publisher_Book_Pair ))
+        PreparedStatement pstmt = null;  // TODO: Change to Prepared Statement
+    
+        HashSet < String > publisher_Book = getPublisherBookPair( conn );
+        HashSet < String > group_Book = getGroupNameBookPair( conn );
+    
+    
+        String bookTitle;
+        String groupName;
+        String publisherName;
+        int year;
+        int pages;
+    
+        boolean edit = true;
+    
+        do
         {
-            System.out.println("The database already contains an entry with: ");
-            System.out.println("Book Title: " + bookTitle);
-            System.out.println("Publisher: " + publisherName);
-            System.out.println("Please change either attribute to proceed with adding this Book");
             bookTitle = setBookTitle();
+            groupName = setWritingGroup( conn );
             publisherName = setPublisher( conn );
-            publisher_Book_Pair = publisherName + "_" + bookTitle;
-        }
+            year = setYear();
+            pages = setPages();
     
-        while (group_Book.contains( group_Book_Pair))
-        {
-            System.out.println("The database already contains an entry with: ");
-            System.out.println("Book Title: " + bookTitle);
-            System.out.println("Writing Group: " + groupName);
-            System.out.println("Please change either attribute to proceed with adding this Book");
-            bookTitle = setBookTitle();
-            publisherName = setPublisher( conn );
-            publisher_Book_Pair = publisherName + "_" + bookTitle;
-        }
-        
-        boolean confirm = false;
     
-        String displayFormat = "%-20s: %-20s\n";
-        System.out.println("Here's the information you want to put in: ");
-        System.out.printf(displayFormat, "Group Name", groupName);
-        System.out.printf(displayFormat, "Book Title", bookTitle);
-        System.out.printf( displayFormat, "Publisher", publisherName );
-        System.out.printf( displayFormat, "Year Published", dispNull( Integer.toString(year )) );
-        System.out.printf( displayFormat, "Number of Pages", dispNull( Integer.toString( pages ) ) );
+            String publisher_Book_Pair = publisherName + "_" + bookTitle;
+            String group_Book_Pair = groupName + "_" + bookTitle;
     
-        System.out.println("");
+            while ( publisher_Book.contains( publisher_Book_Pair ) )
+            {
+                System.out.println( "The database already contains an entry with: " );
+                System.out.println( "Book Title: " + bookTitle );
+                System.out.println( "Publisher: " + publisherName );
+                System.out.println( "Please change either attribute to proceed with adding this Book" );
+                bookTitle = setBookTitle();
+                publisherName = setPublisher( conn );
+                publisher_Book_Pair = publisherName + "_" + bookTitle;
+            }
     
-        String sql = "INSERT INTO " + table;
-        
-        if (year == -1 && pages != -1)
-        {
-            sql += "(groupName, bookTitle,publisherName, numberOfPages) values(";
-            sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + ","  + pages + ")";
-            pstmt = conn.prepareStatement(sql);
+            while ( group_Book.contains( group_Book_Pair ) )
+            {
+                System.out.println( "The database already contains an entry with: " );
+                System.out.println( "Book Title: " + bookTitle );
+                System.out.println( "Writing Group: " + groupName );
+                System.out.println( "Please change either attribute to proceed with adding this Book" );
+                bookTitle = setBookTitle();
+                publisherName = setPublisher( conn );
+                publisher_Book_Pair = publisherName + "_" + bookTitle;
+            }
+    
+            String displayFormat = "%-20s: %-20s\n";
+            System.out.println( "Here's the information you want to put in: " );
+            System.out.printf( displayFormat, "Group Name", groupName );
+            System.out.printf( displayFormat, "Book Title", bookTitle );
+            System.out.printf( displayFormat, "Publisher", publisherName );
+            System.out.printf( displayFormat, "Year Published", dispNull( Integer.toString( year ) ) );
+            System.out.printf( displayFormat, "Number of Pages", dispNull( Integer.toString( pages ) ) );
+    
+            System.out.println( "Does this look correct? (Y/N)" );
+    
+            boolean yesNo = UserInput.getYesNo();
+    
+            edit = !yesNo;
         }
-        else if (year != -1 && pages == -1)
+        while ( edit );
+    
+        System.out.println( "Would you like to add " + bookTitle + " to the Database? (Y/N" );
+        boolean yesNo = UserInput.getYesNo();
+    
+        if ( yesNo )
         {
-            sql += "(groupName, bookTitle,publisherName,yearPublished) values(";
-            sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + year + ")";
-            pstmt = conn.prepareStatement(sql);
+            String sql = "INSERT INTO " + table;
+    
+            if ( year == -1 && pages != -1 )
+            {
+                sql += "(groupName, bookTitle,publisherName, numberOfPages) values(";
+                sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + pages + ")";
+                pstmt = conn.prepareStatement( sql );
+            }
+            else if ( year != -1 && pages == -1 )
+            {
+                sql += "(groupName, bookTitle,publisherName,yearPublished) values(";
+                sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + year + ")";
+                pstmt = conn.prepareStatement( sql );
+            }
+            else if ( year == -1 && pages == -1 )
+            {
+                sql += "(groupName, bookTitle,publisherName) values(";
+                sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + ")";
+                pstmt = conn.prepareStatement( sql );
+            }
+            else
+            {
+                sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
+                sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + year + "," + pages + ")";
+                pstmt = conn.prepareStatement( sql );
+            }
         }
-        else if (year == -1 && pages == -1)
-        {
-            sql += "(groupName, bookTitle,publisherName) values(";
-            sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + ")";
-            pstmt = conn.prepareStatement(sql);
-        }
-        else
-        {
-            sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
-            sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + year + "," + pages + ")";
-            pstmt = conn.prepareStatement(sql);
-        }
-        
-        
     }
     
     public static String setBookTitle()
