@@ -17,22 +17,22 @@ Fill each [ ] with 'X' if test case was passed.
 
 ### Insert Book
 
- * [ ] Book's Writing Group cannot be blank (Test by just pressing Enter or putting spaces and then Enter)
- * [ ] Book's Writing Group cannot exceed 50 Characters
- * [ ] Book's Writing Group must exist in table WRITINGGROUP
- * [ ] Book's Title cannot be blank
- * [ ] Book's Title cannot exceed 50 characters
- * [ ] Book's Publisher cannot be blank
- * [ ] Book's Publisher cannot exceed 50 characters
- * [ ] Book's Publisher must exist in table PUBLISHERS
+ * [X] Book's Writing Group cannot be blank (Test by just pressing Enter or putting spaces and then Enter)
+ * [X] Book's Writing Group cannot exceed 50 Characters
+ * [X] Book's Writing Group must exist in table WRITINGGROUP
+ * [X] Book's Title cannot be blank
+ * [X] Book's Title cannot exceed 50 characters
+ * [X] Book's Publisher cannot be blank
+ * [X] Book's Publisher cannot exceed 50 characters
+ * [X] Book's Publisher must exist in table PUBLISHERS
  * [ ] New Book must have UNIQUE Title-WritingGroup Pair
  * [ ] New Book must have UNIQUE Title-Publisher Pair
- * [ ] New Books must have been published at least after the 1900's
- * [ ] New Books cannot be published in the future
- * [ ] New Books must have at least 1 page
- * [ ] Make it optional to input 'year' and 'pages' attribute for new Books
- * [ ] If 'year' and 'pages' not inputted, verify that the attribute's value is 'NULL'
- * [ ] Verify that the new Book was added to database upon execution of SQL Statements
+ * [X] New Books must have been published at least after the 1900's
+ * [X] New Books cannot be published in the future
+ * [X] New Books must have at least 1 page
+ * [X] Make it optional to input 'year' and 'pages' attribute for new Books
+ * [X] If 'year' and 'pages' not inputted, verify that the attribute's value is 'NULL'
+ * [X] Verify that the new Book was added to database upon execution of SQL Statements
  
  
 ### Add Publisher
