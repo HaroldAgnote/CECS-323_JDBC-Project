@@ -9,10 +9,10 @@ Fill each [ ] with 'X' if test case was passed.
 
 ### Listing Rows
 
- * [ ] All rows from a table are listed
- * [ ] Each row from the table can be selected/listed
- * [ ] All data from each row correctly matches data in Database
- * [ ] Can return to main menu after viewing data in rows
+ * [X] All rows from a table are listed
+ * [X] Each row from the table can be selected/listed
+ * [X] All data from each row correctly matches data in Database
+ * [X] Can return to main menu after viewing data in rows
  
 
 ### Insert Book
