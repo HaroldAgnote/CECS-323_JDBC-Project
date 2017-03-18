@@ -594,7 +594,7 @@ public class CECS323JavaTermProject
         String numberOfPages = "";
         
         do
-        {
+        { 
             System.out.println( "Enter Nothing to cancel Operation" );
             System.out.print( "Book Title: " );
             bookTitle = UserInput.getInputLine();
