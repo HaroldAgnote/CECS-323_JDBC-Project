@@ -606,7 +606,7 @@ public class CECS323JavaTermProject
             {
                 if ( !books.contains( bookTitle ) && !bookTitle.trim().isEmpty() )
             {
-                System.out.println( bookTitle + " does not exist in Books" );
+                System.out.println( bookTitle + " does not exist in Books" ); 
                 System.out.println( "Please enter an existing books from the list:\n" );
                 displayInformation( "BOOKS", "BOOKTITLE", conn );
             }
