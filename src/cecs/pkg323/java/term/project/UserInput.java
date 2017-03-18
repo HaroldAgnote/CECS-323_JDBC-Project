@@ -7,7 +7,8 @@ import java.util.Scanner;
  * return them to the program it was called upon.
  * 
  * @author Shannon Foss
- * @modified by Harold Agnote
+ *
+ * Tweaks made by Harold Agnote
  *
  */
 public class UserInput

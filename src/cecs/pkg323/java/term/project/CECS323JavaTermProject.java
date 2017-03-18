@@ -4,19 +4,16 @@ import java.sql.*;
 import java.util.*;
 
 /**
- *
  * Harold Agnote
  * Xinyi Chen
- *
+ * <p>
  * Professor David Brown
- *
+ * <p>
  * CECS 323 - Sec. 07
- *
+ * <p>
  * 3/20/2017
- *
+ * <p>
  * CECS 323 - JDBC Project
- *
- *
  */
 public class CECS323JavaTermProject
 {
@@ -52,9 +49,6 @@ public class CECS323JavaTermProject
                 int menu = displayMainMenu();
                 if ( menu != 7 )
                 {
-                    String table = "";
-                    String data = "";
-                    
                     switch ( menu )
                     {
                         case 1:
@@ -70,20 +64,18 @@ public class CECS323JavaTermProject
                             insertBook( conn );
                             break;
                         case 5:
-                            insertPublisher(conn);
+                            insertPublisher( conn );
                             break;
                         case 6:
                             removeBook( conn );
                             break;
+                        default:
+                            done = true;
+                            break;
                     }
-                }
-                else
-                {
-                    done = true;
                 }
             }
             while ( !done );
-            
         }
         catch ( SQLException se )
         {
@@ -140,7 +132,7 @@ public class CECS323JavaTermProject
         }
         try
         {
-            if (Integer.parseInt( input ) == -1)
+            if ( Integer.parseInt( input ) == -1 )
             {
                 return "N/A";
             }
@@ -152,15 +144,13 @@ public class CECS323JavaTermProject
         return input;
     }
     
-    //Prompt the user for the database name, and the credentials.
-    //If your database has no credentials, you can update this code to
-    //remove that from the connection string.
+    
     public static void login()
     {
         System.out.println( "Select Login Credentials: \n" );
         System.out.println( "1. Harold Agnote" );
         System.out.println( "2. Xinyi Chen\n" );
-        System.out.println( "3. Manual Login");
+        System.out.println( "3. Manual Login" );
         
         int choice = UserInput.getInt( 1, 3 );
         
@@ -170,7 +160,7 @@ public class CECS323JavaTermProject
             PASS = "test";
             DBNAME = "Term_Project";
         }
-        else if (choice == 2)
+        else if ( choice == 2 )
         {
             USER = "ad";
             PASS = "password";
@@ -178,11 +168,17 @@ public class CECS323JavaTermProject
         }
         else
         {
-            System.out.print("Name of the database: ");
+            /*
+             * Prompt the user for the database name, and the credentials.
+             * If your database has no credentials, you can update this code to
+             * remove that from the connection string.
+             */
+    
+            System.out.print( "Name of the database: " );
             DBNAME = UserInput.getInputLine();
-            System.out.print("Database user name: ");
+            System.out.print( "Database user name: " );
             USER = UserInput.getInputLine();
-            System.out.print("Database password: ");
+            System.out.print( "Database password: " );
             PASS = UserInput.getInputLine();
         }
         
@@ -259,13 +255,13 @@ public class CECS323JavaTermProject
             information.add( info );
             i++;
         }
-        System.out.println( i + ". Go Back\n" );
         int choice = 0;
         do
         {
+            System.out.println( "Input 0 to go back to main menu" );
             System.out.print( "Select an entry from " + table + " to view more information about: " );
-            choice = UserInput.getInt( 1, i );
-            if ( choice < i )
+            choice = UserInput.getInt( 0, i - 1 );
+            if ( choice > 0 )
             {
                 String info = information.get( choice - 1 );
                 stmt.setString( 1, info );
@@ -290,113 +286,22 @@ public class CECS323JavaTermProject
                 rs.beforeFirst();
             }
         }
-        while ( choice < i );
+        while ( choice > 0 );
         
     }
     
-    
-    public static void insertPublisher(Connection conn) throws SQLException
-    {
-        String table = "PUBLISHERS"; // TODO Add a Publisher/Update Books
-        HashSet <String> publishers = getPublishers( conn );
-        int phone[] = new int[10];
-        System.out.println("Please enter the new publisher's name");
-        String publisherName = UserInput.getInputLine();
-        while (publisherName.length()>50)
-        {
-            System.out.println("Publisher Name is too long, try again");
-            publisherName = UserInput.getInput();
-        }
-        
-        while (publishers.contains(publisherName))
-        {
-            System.out.println("The database already contains an entry with: ");
-            System.out.println("PublisherName: " + publisherName);
-            System.out.println("Please enter new PublisherName");
-            publisherName = UserInput.getInputLine();
-        }
-        
-        System.out.println("Please enter the new publisher's address");
-        String publisherAddress = UserInput.getInputLine();
-        while (publisherAddress.length()>50)
-        {
-            System.out.println("Publisher address is too long, try again");
-            publisherAddress = UserInput.getInput();
-        }
-        
-        System.out.println("Please enter the new publisher's Phone number: Please only enter numbers");
-        String publisherPhone = UserInput.getInputLine();
-        
-        while (!publisherPhone.matches("[0-9]+") || publisherPhone.length()!= 10)
-        {
-            System.out.println("Please enter valid phone number and with numbers only");
-            publisherPhone = UserInput.getInputLine();
-        }
-        
-        if (publisherPhone.matches("[0-9]+") && publisherPhone.length()== 10) 
-        {
-            for (int i = 0; i <10; i++)
-            {
-                phone[i]= Character.getNumericValue(publisherPhone.charAt(i));
-            }
-            publisherPhone = null;
-        }
-        for (int i = 0; i<10; i++)
-            {
-                if (i==2)
-                {
-                    publisherPhone +="-"+phone[i];
-                }
-                else if (i==5)
-                {
-                    publisherPhone +="-"+phone[i];
-                }
-                else
-                {
-                    publisherPhone += phone[i];
-                }
-            }
-        
-        System.out.println("Please enter the new publisher's email");
-        String publisherEmail = UserInput.getInputLine();
-        
-        while (publisherEmail.length()>30)
-        {
-            System.out.println("Publisher email is too long, try again");
-            publisherEmail = UserInput.getInput();
-        }
-        
-        System.out.println("Please enter the old publisher's name that you wish to update with");
-        String oldName = UserInput.getInputLine();               
-        while (!publishers.contains(oldName))
-        {
-            System.out.println("The database does not contains an entry with: ");
-            System.out.println("PublisherName: " + oldName);
-            System.out.println("Please enter existing publishers name");
-            displayInformation( "PUBLISHERS", "PUBLISHERNAME", conn );
-            oldName = UserInput.getInputLine();
-        }
-                            
-        String sql = "INSERT INTO "+table+ " (publisherName, publisherAddress,publisherPhone,publisherEmail) values(";
-        sql +=  singleQuoteString(publisherName) +","+singleQuoteString(publisherAddress)+","+singleQuoteString(publisherPhone)+","+singleQuoteString(publisherEmail) + ")";
-        PreparedStatement pstmt = conn.prepareStatement(sql);
-        pstmt.executeUpdate();
-                            
-        String sql2 = "Update Books set books.publishername = "+singleQuoteString(publisherName)+" where books.publisherName = "+singleQuoteString(oldName);
-        pstmt = conn.prepareStatement(sql2);
-        pstmt.executeUpdate();
-    }
     
     /*
-     * TODO: Need to account for nonexistent publishers/writing groups
      * Planning on just checking if a Publisher/Writing Group exists in the table
      * If so, proceed with add, otherwise prompt user to select a valid
      */
     public static void insertBook( Connection conn ) throws SQLException
     {
-        String table = "BOOKS";
-        PreparedStatement pstmt = null;  // TODO: Change to Prepared Statement
-    
+        PreparedStatement pstmt = null;
+        String insertSql = "INSERT INTO BOOKS(groupName, bookTitle,publisherName,yearPublished, numberOfPages)\n";
+        insertSql += "VALUES(?,?,?,?,?)";
+        pstmt = conn.prepareStatement( insertSql );
+        
         HashSet < String > publisher_Book = getPublisherBookPair( conn );
         HashSet < String > group_Book = getGroupNameBookPair( conn );
     
@@ -464,33 +369,212 @@ public class CECS323JavaTermProject
     
         if ( yesNo )
         {
-            String sql = "INSERT INTO " + table;
+            pstmt.setString( 1, groupName );
+            pstmt.setString( 2, bookTitle );
+            pstmt.setString( 3, publisherName );
     
-            if ( year == -1 && pages != -1 )
+            if ( year == -1 )
             {
-                sql += "(groupName, bookTitle,publisherName, numberOfPages) values(";
-                sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + pages + ")";
-                pstmt = conn.prepareStatement( sql );
-            }
-            else if ( year != -1 && pages == -1 )
-            {
-                sql += "(groupName, bookTitle,publisherName,yearPublished) values(";
-                sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + year + ")";
-                pstmt = conn.prepareStatement( sql );
-            }
-            else if ( year == -1 && pages == -1 )
-            {
-                sql += "(groupName, bookTitle,publisherName) values(";
-                sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + ")";
-                pstmt = conn.prepareStatement( sql );
+                pstmt.setString( 4, null );
             }
             else
             {
-                sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
-                sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + year + "," + pages + ")";
-                pstmt = conn.prepareStatement( sql );
+                pstmt.setString( 4, Integer.toString( year ) );
+            }
+    
+            if ( pages == -1 )
+            {
+                pstmt.setString( 5, null );
+            }
+            else
+            {
+                pstmt.setString( 5, Integer.toString( pages ) );
             }
             pstmt.execute();
+        }
+    }
+    
+    public static void insertPublisher( Connection conn ) throws SQLException
+    {
+        String insertSql = "INSERT INTO PUBLISHERS (publisherName, publisherAddress,publisherPhone,publisherEmail)\n";
+        insertSql += "VALUES(?,?,?,?)";
+        PreparedStatement pstmt = conn.prepareStatement( insertSql );
+        
+        String viewSql = "SELECT BOOKTITLE FROM BOOKS\n";
+        viewSql += "WHERE PUBLISHERNAME = ?";
+        
+        String updateSql = "UPDATE Books SET books.publishername = ? \n";
+        updateSql += "WHERE BOOKS.PUBLISHERNAME = ?";
+        
+        ArrayList < String > matchingBooks = new ArrayList <>();
+        HashSet < String > publishers = getPublishers( conn );
+        
+        String publisherName;
+        String publisherAddress;
+        String publisherPhone;
+        String publisherEmail;
+        String oldName;
+        
+        boolean edit = true;
+        
+        do
+        {
+            do
+            {
+                System.out.print( "Publisher Name: " );
+                publisherName = UserInput.getInputLine();
+                if ( publisherName.trim().isEmpty() )
+                {
+                    System.out.println( "Publisher Name cannot be empty" );
+                }
+                else if ( publisherName.length() > 50 )
+                {
+                    System.out.println( "Publisher Name is too long, please try again" );
+                }
+                else if ( publishers.contains( publisherName ) )
+                {
+                    System.out.println( "The database already contains an entry with: " );
+                    System.out.println( "PublisherName: " + publisherName );
+                    System.out.println( "Please enter new PublisherName" );
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while ( true );
+            
+            do
+            {
+                System.out.println( "(Press Enter to Skip)" );
+                System.out.print( "Publisher Address: " );
+                publisherAddress = UserInput.getInputLine();
+                if ( publisherAddress.length() > 50 )
+                {
+                    System.out.println( "Publisher address is too long, try again" );
+                }
+                else
+                {
+                    break;
+                }
+                
+            }
+            while ( true );
+            
+            do
+            {
+                System.out.println( "(Press Enter to Skip)" );
+                System.out.print( "Publisher's Phone number: " );
+                publisherPhone = UserInput.getInputLine();
+                if ( publisherPhone.length() > 20 )
+                {
+                    System.out.println( "Phone Number too long, try again" );
+                }
+                else
+                {
+                    break;
+                }
+                
+            }
+            while ( true );
+            
+            do
+            {
+                System.out.println( "(Press Enter to Skip)" );
+                System.out.print( "Publisher Email: " );
+                publisherEmail = UserInput.getInputLine();
+                
+                if ( publisherEmail.length() > 30 )
+                {
+                    System.out.println( "Publisher email is too long, try again" );
+                    publisherEmail = UserInput.getInput();
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while ( true );
+            
+            String displayFormat = "%-20s : %-50s\n";
+            System.out.println( "Here's the information for the Publisher to be added: \n" );
+            System.out.printf( displayFormat, "Publisher Name", publisherName );
+            System.out.printf( displayFormat, "Publisher Address", dispNull( publisherAddress ) );
+            System.out.printf( displayFormat, "Publisher Phone", dispNull( publisherPhone ) );
+            System.out.printf( displayFormat, "Publisher Email", dispNull( publisherEmail ) );
+            
+            System.out.println( "Is this information correct? (Y/N)" );
+            
+            edit = !UserInput.getYesNo();
+        }
+        while ( edit );
+        
+        System.out.println( "Would you like to add this Publisher? (Y/N)" );
+        
+        boolean yesNo = UserInput.getYesNo();
+        
+        if ( yesNo )
+        {
+            if ( publisherAddress.trim().isEmpty() )
+            {
+                publisherAddress = null;
+            }
+            if ( publisherPhone.trim().isEmpty() )
+            {
+                publisherPhone = null;
+            }
+            if ( publisherEmail.trim().isEmpty() )
+            {
+                publisherEmail = null;
+            }
+            pstmt.setString( 1, publisherName );
+            pstmt.setString( 2, publisherAddress );
+            pstmt.setString( 3, publisherPhone );
+            pstmt.setString( 4, publisherEmail );
+            pstmt.executeUpdate();
+            
+            do
+            {
+                System.out.println( "Please enter the old publisher's name that you wish to update with" );
+                oldName = UserInput.getInputLine();
+                if ( !publishers.contains( oldName ) )
+                {
+                    System.out.println( "The database does not contains an entry with: " );
+                    System.out.println( "PublisherName: " + oldName );
+                    System.out.println( "Please enter existing publishers name" );
+                    displayInformation( "PUBLISHERS", "PUBLISHERNAME", conn );
+                }
+                else if ( oldName.equals( publisherName ) )
+                {
+                    System.out.println( "You can't use the recently added Publisher" );
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while ( true );
+            
+            pstmt = conn.prepareStatement( viewSql );
+            pstmt.setString( 1, oldName );
+            ResultSet rs = pstmt.executeQuery();
+            
+            while ( rs.next() )
+            {
+                matchingBooks.add( rs.getString( "BOOKTITLE" ) );
+            }
+            
+            System.out.println( "Here are the books that are published by: " + oldName );
+            for ( int i = 0; i < matchingBooks.size(); i++ )
+            {
+                System.out.println( ( i + 1 ) + ". " + matchingBooks.get( i ) );
+            }
+            System.out.println( "\nThey will be updated such they are published by: " + publisherName );
+            
+            pstmt = conn.prepareStatement( updateSql );
+            pstmt.setString( 1, publisherName );
+            pstmt.setString( 2, oldName );
+            pstmt.executeUpdate();
         }
     }
     
@@ -501,9 +585,10 @@ public class CECS323JavaTermProject
         String deleteBookSql = "DELETE FROM BOOKS WHERE BOOKS.BOOKTITLE = ?";
         pstmt = conn.prepareStatement( viewBookSql );
         HashSet < String > books = getBooks( conn );
-        String bookTitle;
+    
         boolean valid = false;
-        
+    
+        String bookTitle;
         String groupName = "";
         String publisherName = "";
         String yearPublished = "";
@@ -511,11 +596,13 @@ public class CECS323JavaTermProject
         
         do
         {
+            System.out.println( "Enter Nothing to cancel Operation" );
+            System.out.print( "Book Title: " );
             bookTitle = UserInput.getInputLine();
             if ( !books.contains( bookTitle ) && !bookTitle.trim().isEmpty() )
             {
                 System.out.println( bookTitle + " does not exist in Books" );
-                System.out.println( "Please enter an existing books from the list:" );
+                System.out.println( "Please enter an existing books from the list:\n" );
                 displayInformation( "BOOKS", "BOOKTITLE", conn );
             }
             else
@@ -539,7 +626,7 @@ public class CECS323JavaTermProject
             }
             
             String displayFormat = "%-20s: %-20s\n";
-            System.out.println( "This is the Book you want to remove: " );
+            System.out.println( "This is the Book you want to remove:\n" );
             System.out.printf( displayFormat, "Group Name", groupName );
             System.out.printf( displayFormat, "Book Title", bookTitle );
             System.out.printf( displayFormat, "Publisher", publisherName );
@@ -567,13 +654,13 @@ public class CECS323JavaTermProject
         {
             System.out.print( "Book Title: " );
             bookTitle = UserInput.getInputLine();
-            if (bookTitle.trim().isEmpty())
+            if ( bookTitle.trim().isEmpty() )
             {
-                System.out.println("Title cannot be Empty");
+                System.out.println( "Title cannot be Empty" );
             }
-            else if (bookTitle.length() > 50)
+            else if ( bookTitle.length() > 50 )
             {
-                System.out.println("Title is too long");
+                System.out.println( "Title is too long" );
             }
             else
             {
@@ -584,28 +671,28 @@ public class CECS323JavaTermProject
         return bookTitle;
     }
     
-    public static String setWritingGroup(Connection conn) throws SQLException
+    public static String setWritingGroup( Connection conn ) throws SQLException
     {
-        HashSet <String> writingGroups = getWritingGroups( conn );
+        HashSet < String > writingGroups = getWritingGroups( conn );
         boolean valid = false;
         String groupName;
         do
         {
-            System.out.println( "Please enter the writer group's name of the book" );
+            System.out.print( "Writing Group Name: " );
             groupName = UserInput.getInputLine();
-            if (groupName.length()>50)
+            if ( groupName.length() > 50 )
             {
-                System.out.println("Group Name is too long, please enter less than 50 characters");
+                System.out.println( "Group Name is too long, please enter less than 50 characters" );
                 groupName = UserInput.getInputLine();
             }
-            if (groupName.trim().isEmpty())
+            if ( groupName.trim().isEmpty() )
             {
-                System.out.println("Writing Group Name cannot be empty");
+                System.out.println( "Writing Group Name cannot be empty" );
             }
-            else if (!writingGroups.contains( groupName ))
+            else if ( !writingGroups.contains( groupName ) )
             {
-                System.out.println(groupName + " does not exist in WRITINGGROUPS");
-                System.out.println("Please enter an existing Writing Group from the list:");
+                System.out.println( groupName + " does not exist in WRITINGGROUPS" );
+                System.out.println( "Please enter an existing Writing Group from the list:" );
                 displayInformation( "WRITINGGROUPS", "GROUPNAME", conn );
             }
             else
@@ -617,9 +704,9 @@ public class CECS323JavaTermProject
         return groupName;
     }
     
-    public static String setPublisher(Connection conn) throws SQLException
+    public static String setPublisher( Connection conn ) throws SQLException
     {
-        HashSet <String> publishers = getPublishers( conn );
+        HashSet < String > publishers = getPublishers( conn );
         boolean valid = false;
         String publisherName;
     
@@ -627,19 +714,19 @@ public class CECS323JavaTermProject
         {
             System.out.println( "Please enter publisher name of the book" );
             publisherName = UserInput.getInputLine();
-            if (publisherName.length()>50)
+            if ( publisherName.length() > 50 )
             {
-                System.out.println("Group Name is too long, please enter less than 50 characters");
+                System.out.println( "Group Name is too long, please enter less than 50 characters" );
                 publisherName = UserInput.getInputLine();
             }
-            if (publisherName.trim().isEmpty())
+            if ( publisherName.trim().isEmpty() )
             {
-                System.out.println("Publisher Name can't be empty");
+                System.out.println( "Publisher Name can't be empty" );
             }
-            else if (!publishers.contains( publisherName ))
+            else if ( !publishers.contains( publisherName ) )
             {
-                System.out.println(publisherName + " does not exist in PUBLISHERS");
-                System.out.println("Please enter an existing Publisher from the list");
+                System.out.println( publisherName + " does not exist in PUBLISHERS" );
+                System.out.println( "Please enter an existing Publisher from the list" );
                 displayInformation( "PUBLISHERS", "PUBLISHERNAME", conn );
             }
             else
@@ -654,37 +741,37 @@ public class CECS323JavaTermProject
     
     public static int setYear()
     {
-        final int currentYear = (Calendar.getInstance()).get( Calendar.YEAR );
+        final int currentYear = ( Calendar.getInstance() ).get( Calendar.YEAR );
         boolean valid = false;
         int year = 0;
         
         do
         {
             System.out.println( "(Press Enter to Skip)" );
-            System.out.print("Year Published: ");
+            System.out.print( "Year Published: " );
             try
             {
                 String input = UserInput.getInputLine();
-                if (!(input.trim().isEmpty()))
+                if ( !( input.trim().isEmpty() ) )
                 {
                     year = Integer.parseInt( input );
                 }
                 else
                 {
-                    year= -1;
+                    year = -1;
                 }
             }
             catch ( NumberFormatException ime )
             {
-                System.out.println("Not an Integer");
+                System.out.println( "Not an Integer" );
             }
-            if (year > currentYear)
+            if ( year > currentYear )
             {
-                System.out.println("This book can't be published in the future");
+                System.out.println( "This book can't be published in the future" );
             }
-            else if (year != -1 && year < 1900 )
+            else if ( year != -1 && year < 1900 )
             {
-                System.out.println("Please enter a year after the 1900's");
+                System.out.println( "Please enter a year after the 1900's" );
             }
             else
             {
@@ -702,11 +789,11 @@ public class CECS323JavaTermProject
         do
         {
             System.out.println( "(Press Enter to Skip)" );
-            System.out.print("Number of Pages: ");
+            System.out.print( "Number of Pages: " );
             try
             {
                 String input = UserInput.getInputLine();
-                if (!(input.trim().isEmpty()))
+                if ( !( input.trim().isEmpty() ) )
                 {
                     pages = Integer.parseInt( input );
                 }
@@ -717,24 +804,24 @@ public class CECS323JavaTermProject
             }
             catch ( NumberFormatException ime )
             {
-                System.out.println("Not an Integer");
+                System.out.println( "Not an Integer" );
             }
-            if (pages == -1  || pages > 0)
+            if ( pages == -1 || pages > 0 )
             {
                 valid = true;
             }
             else
             {
-                System.out.println("Invalid number of pages");
+                System.out.println( "Invalid number of pages" );
             }
         }
         while ( !valid );
         return pages;
     }
     
-    public static HashSet <String> getPublishers(Connection conn) throws SQLException
+    public static HashSet < String > getPublishers( Connection conn ) throws SQLException
     {
-        HashSet <String> publishers = new HashSet<>(  );
+        HashSet < String > publishers = new HashSet <>();
         String sql = "SELECT PUBLISHERNAME FROM PUBLISHERS";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery( sql );
@@ -747,23 +834,25 @@ public class CECS323JavaTermProject
         
         return publishers;
     }
-    public static HashSet <String> getBooks(Connection conn) throws SQLException
+    
+    public static HashSet < String > getBooks( Connection conn ) throws SQLException
     {
-        HashSet <String> books = new HashSet<>();
+        HashSet < String > books = new HashSet <>();
         String sql = "SELECT BOOKTITLE FROM BOOKS";
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
-        
-        while (rs.next())
+        ResultSet rs = stmt.executeQuery( sql );
+    
+        while ( rs.next() )
         {
-            String name = rs.getString("BOOKTITLE");
-            books.add(name);
+            String name = rs.getString( "BOOKTITLE" );
+            books.add( name );
         }
         return books;
     }
-    public static HashSet <String> getWritingGroups(Connection conn) throws SQLException
+    
+    public static HashSet < String > getWritingGroups( Connection conn ) throws SQLException
     {
-        HashSet <String> writingGroups = new HashSet<>(  );
+        HashSet < String > writingGroups = new HashSet <>();
         String sql = "SELECT GROUPNAME FROM WRITINGGROUPS";
         PreparedStatement stmt = conn.prepareStatement( sql );
         ResultSet rs = stmt.executeQuery();
@@ -777,45 +866,45 @@ public class CECS323JavaTermProject
         return writingGroups;
     }
     
-    public static HashSet <String> getPublisherBookPair(Connection conn) throws SQLException
+    public static HashSet < String > getPublisherBookPair( Connection conn ) throws SQLException
     {
-        HashSet <String> publisher_Book = new HashSet <>(  );
+        HashSet < String > publisher_Book = new HashSet <>();
         String sql = "SELECT PUBLISHERNAME, BOOKTITLE FROM BOOKS";
         PreparedStatement stmt = conn.prepareStatement( sql );
-        ResultSet rs = stmt.executeQuery(  );
-        
-        while (rs.next() )
+        ResultSet rs = stmt.executeQuery();
+    
+        while ( rs.next() )
         {
             String publisher = rs.getString( "PUBLISHERNAME" );
-            String book = rs.getString("BOOKTITLE");
+            String book = rs.getString( "BOOKTITLE" );
             publisher_Book.add( publisher + "_" + book );
         }
         
         return publisher_Book;
     }
     
-    public static HashSet <String> getGroupNameBookPair(Connection conn) throws SQLException
+    public static HashSet < String > getGroupNameBookPair( Connection conn ) throws SQLException
     {
-        HashSet <String> group_Book = new HashSet <>(  );
+        HashSet < String > group_Book = new HashSet <>();
         String sql = "SELECT GROUPNAME, BOOKTITLE FROM BOOKS";
         PreparedStatement stmt = conn.prepareStatement( sql );
-        ResultSet rs = stmt.executeQuery(  );
-        
-        while (rs.next() )
+        ResultSet rs = stmt.executeQuery();
+    
+        while ( rs.next() )
         {
             String publisher = rs.getString( "GROUPNAME" );
-            String book = rs.getString("BOOKTITLE");
+            String book = rs.getString( "BOOKTITLE" );
             group_Book.add( publisher + "_" + book );
         }
         
         return group_Book;
     }
     
-    public static void displayFormattedArray(String [] display, int [] format)
+    public static void displayFormattedArray( String[] display, int[] format )
     {
-        for (int i = 0; i < display.length; i++)
+        for ( int i = 0; i < display.length; i++ )
         {
-            System.out.print( String.format( "%-" + format[i] + "s", dispNull((display[i] ))));
+            System.out.print( String.format( "%-" + format[ i ] + "s", dispNull( ( display[ i ] ) ) ) );
         }
     }
     
