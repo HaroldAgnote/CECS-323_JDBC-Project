@@ -71,7 +71,28 @@ public class CECS323JavaTermProject
                             break;
                         case 5:
                             table = "PUBLISHER"; // TODO Add a Publisher/Update Books
+                            System.out.println("Please enter the new publisher's name");
+                            String publisherName = UserInput.getInputLine();
+                            System.out.println("Please enter the new publisher's address");
+                            String publisherAddress = UserInput.getInputLine();
+                            System.out.println("Please enter the new publisher's Phone number");
+                            String publisherPhone = UserInput.getInputLine();
+                            System.out.println("Please enter the new publisher's email");
+                            String publisherEmail = UserInput.getInputLine();
                             
+                            
+                            System.out.println("Please enter the old publisher's name that you wish to replace with");
+                            String oldName = UserInput.getInputLine();
+                            
+                            String sql = "INSERT INTO "+table+ " (publisherName, publisherAddress,publisherPhone,publisherEmail) values(";
+                            sql +=  singleQuoteString(publisherName) +","+singleQuoteString(publisherAddress)+","+singleQuoteString(publisherPhone)+","+singleQuoteString(publisherEmail);
+                            PreparedStatement pstmt = conn.prepareStatement(sql);
+                            
+                            String sql2 = "Update Books set books.publishername = "+singleQuoteString(publisherName)+" where books.publisherName = "+singleQuoteString(oldName);
+                            pstmt = conn.prepareStatement(sql2);
+                            
+                            String sql3 = "DELETE FROM "+singleQuoteString(table)+" where publisherName = "+oldName;
+                            pstmt = conn.prepareStatement(sql3);
                             break;
                         case 6:
                             removeBook( conn );
@@ -311,7 +332,7 @@ public class CECS323JavaTermProject
         int year = setYear();
         int pages = setPages();
         
-        Statement stmt = null;  // TODO: Change to Prepared Statement
+        PreparedStatement pstmt = null;  // TODO: Change to Prepared Statement
         String table = "BOOKS";
         
         String publisher_Book_Pair = publisherName + "_" + bookTitle;
@@ -357,29 +378,25 @@ public class CECS323JavaTermProject
         {
             sql += "(groupName, bookTitle,publisherName, numberOfPages) values(";
             sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + ","  + pages + ")";
-            stmt = conn.createStatement();
-            stmt.executeUpdate( sql );
+            pstmt = conn.prepareStatement(sql);
         }
         else if (year != -1 && pages == -1)
         {
             sql += "(groupName, bookTitle,publisherName,yearPublished) values(";
             sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + year + ")";
-            stmt = conn.createStatement();
-            stmt.executeUpdate( sql );
+            pstmt = conn.prepareStatement(sql);
         }
         else if (year == -1 && pages == -1)
         {
             sql += "(groupName, bookTitle,publisherName) values(";
             sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + ")";
-            stmt = conn.createStatement();
-            stmt.executeUpdate( sql );
+            pstmt = conn.prepareStatement(sql);
         }
         else
         {
             sql += "(groupName, bookTitle,publisherName,yearPublished, numberOfPages) values(";
             sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + year + "," + pages + ")";
-            stmt = conn.createStatement();
-            stmt.executeUpdate( sql );
+            pstmt = conn.prepareStatement(sql);
         }
         
         
