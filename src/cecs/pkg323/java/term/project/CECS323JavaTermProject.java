@@ -14,7 +14,7 @@ import java.util.*;
  *
  * 3/20/2017
  *
- * CECS 323 - JDBC roject
+ * CECS 323 - JDBC Project
  *
  *
  */
@@ -459,7 +459,7 @@ public class CECS323JavaTermProject
         }
         while ( edit );
     
-        System.out.println( "Would you like to add " + bookTitle + " to the Database? (Y/N" );
+        System.out.println( "Would you like to add " + bookTitle + " to the Database? (Y/N)" );
         boolean yesNo = UserInput.getYesNo();
     
         if ( yesNo )
@@ -490,6 +490,7 @@ public class CECS323JavaTermProject
                 sql += singleQuoteString( groupName ) + "," + singleQuoteString( bookTitle ) + "," + singleQuoteString( publisherName ) + "," + year + "," + pages + ")";
                 pstmt = conn.prepareStatement( sql );
             }
+            pstmt.execute();
         }
     }
     
