@@ -350,7 +350,7 @@ public class CECS323JavaTermProject
         System.out.println("Please enter the new publisher's email");
         String publisherEmail = UserInput.getInputLine();
         
-        System.out.println("Please enter the old publisher's name that you wish to replace with");
+        System.out.println("Please enter the old publisher's name that you wish to update with");
         String oldName = UserInput.getInputLine();               
         while (!publishers.contains(oldName))
         {
@@ -369,10 +369,6 @@ public class CECS323JavaTermProject
         String sql2 = "Update Books set books.publishername = "+singleQuoteString(publisherName)+" where books.publisherName = "+singleQuoteString(oldName);
         pstmt = conn.prepareStatement(sql2);
         pstmt.executeUpdate();
-                            
-        String sql3 = "DELETE FROM "+table+" where publisherName = "+singleQuoteString(oldName);
-        pstmt = conn.prepareStatement(sql3);
-        pstmt.execute();
     }
     
     /*
