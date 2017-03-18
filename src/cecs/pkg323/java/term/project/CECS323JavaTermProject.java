@@ -300,9 +300,14 @@ public class CECS323JavaTermProject
         String table = "PUBLISHERS"; // TODO Add a Publisher/Update Books
         HashSet <String> publishers = getPublishers( conn );
         int phone[] = new int[10];
-        
         System.out.println("Please enter the new publisher's name");
         String publisherName = UserInput.getInputLine();
+        while (publisherName.length()>50)
+        {
+            System.out.println("Publisher Name is too long, try again");
+            publisherName = UserInput.getInput();
+        }
+        
         while (publishers.contains(publisherName))
         {
             System.out.println("The database already contains an entry with: ");
@@ -313,13 +318,18 @@ public class CECS323JavaTermProject
         
         System.out.println("Please enter the new publisher's address");
         String publisherAddress = UserInput.getInputLine();
+        while (publisherAddress.length()>50)
+        {
+            System.out.println("Publisher address is too long, try again");
+            publisherAddress = UserInput.getInput();
+        }
         
         System.out.println("Please enter the new publisher's Phone number: Please only enter numbers");
         String publisherPhone = UserInput.getInputLine();
         
         while (!publisherPhone.matches("[0-9]+") || publisherPhone.length()!= 10)
         {
-            System.out.println("Please enter valid phone number with numbers only");
+            System.out.println("Please enter valid phone number and with numbers only");
             publisherPhone = UserInput.getInputLine();
         }
         
@@ -349,6 +359,12 @@ public class CECS323JavaTermProject
         
         System.out.println("Please enter the new publisher's email");
         String publisherEmail = UserInput.getInputLine();
+        
+        while (publisherEmail.length()>30)
+        {
+            System.out.println("Publisher email is too long, try again");
+            publisherEmail = UserInput.getInput();
+        }
         
         System.out.println("Please enter the old publisher's name that you wish to update with");
         String oldName = UserInput.getInputLine();               
@@ -491,6 +507,11 @@ public class CECS323JavaTermProject
         {
             System.out.println( "Please enter the writer group's name of the book" );
             groupName = UserInput.getInputLine();
+            if (groupName.length()>50)
+            {
+                System.out.println("Group Name is too long, please enter less than 50 characters");
+                groupName = UserInput.getInputLine();
+            }
             if (groupName.trim().isEmpty())
             {
                 System.out.println("Writing Group Name cannot be empty");
@@ -520,6 +541,11 @@ public class CECS323JavaTermProject
         {
             System.out.println( "Please enter publisher name of the book" );
             publisherName = UserInput.getInputLine();
+            if (publisherName.length()>50)
+            {
+                System.out.println("Group Name is too long, please enter less than 50 characters");
+                publisherName = UserInput.getInputLine();
+            }
             if (publisherName.trim().isEmpty())
             {
                 System.out.println("Publisher Name can't be empty");
