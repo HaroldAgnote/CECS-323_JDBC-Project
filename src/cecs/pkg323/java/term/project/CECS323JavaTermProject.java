@@ -70,32 +70,7 @@ public class CECS323JavaTermProject
                             insertBook( conn );
                             break;
                         case 5:
-                            table = "PUBLISHERS"; // TODO Add a Publisher/Update Books
-                            System.out.println("Please enter the new publisher's name");
-                            String publisherName = UserInput.getInputLine();
-                            System.out.println("Please enter the new publisher's address");
-                            String publisherAddress = UserInput.getInputLine();
-                            System.out.println("Please enter the new publisher's Phone number");
-                            String publisherPhone = UserInput.getInputLine();
-                            System.out.println("Please enter the new publisher's email");
-                            String publisherEmail = UserInput.getInputLine();
-                            
-                            
-                            System.out.println("Please enter the old publisher's name that you wish to replace with");
-                            String oldName = UserInput.getInputLine();
-                            
-                            String sql = "INSERT INTO "+table+ " (publisherName, publisherAddress,publisherPhone,publisherEmail) values(";
-                            sql +=  singleQuoteString(publisherName) +","+singleQuoteString(publisherAddress)+","+singleQuoteString(publisherPhone)+","+singleQuoteString(publisherEmail) + ")";
-                            PreparedStatement pstmt = conn.prepareStatement(sql);
-                            pstmt.executeUpdate();
-                            
-                            String sql2 = "Update Books set books.publishername = "+singleQuoteString(publisherName)+" where books.publisherName = "+singleQuoteString(oldName);
-                            pstmt = conn.prepareStatement(sql2);
-                            pstmt.executeUpdate();
-                            
-                            String sql3 = "DELETE FROM "+table+" where publisherName = "+singleQuoteString(oldName);
-                            pstmt = conn.prepareStatement(sql3);
-                            pstmt.execute();
+                            insertPublisher(conn);
                             break;
                         case 6:
                             removeBook( conn );
@@ -317,6 +292,87 @@ public class CECS323JavaTermProject
         }
         while ( choice < i );
         
+    }
+    
+    
+    public static void insertPublisher(Connection conn) throws SQLException
+    {
+        String table = "PUBLISHERS"; // TODO Add a Publisher/Update Books
+        HashSet <String> publishers = getPublishers( conn );
+        int phone[] = new int[10];
+        
+        System.out.println("Please enter the new publisher's name");
+        String publisherName = UserInput.getInputLine();
+        while (publishers.contains(publisherName))
+        {
+            System.out.println("The database already contains an entry with: ");
+            System.out.println("PublisherName: " + publisherName);
+            System.out.println("Please enter new PublisherName");
+            publisherName = UserInput.getInputLine();
+        }
+        
+        System.out.println("Please enter the new publisher's address");
+        String publisherAddress = UserInput.getInputLine();
+        
+        System.out.println("Please enter the new publisher's Phone number: Please only enter numbers");
+        String publisherPhone = UserInput.getInputLine();
+        
+        while (!publisherPhone.matches("[0-9]+") || publisherPhone.length()!= 10)
+        {
+            System.out.println("Please enter valid phone number with numbers only");
+            publisherPhone = UserInput.getInputLine();
+        }
+        
+        if (publisherPhone.matches("[0-9]+") && publisherPhone.length()== 10) 
+        {
+            for (int i = 0; i <10; i++)
+            {
+                phone[i]= Character.getNumericValue(publisherPhone.charAt(i));
+            }
+            publisherPhone = null;
+        }
+        for (int i = 0; i<10; i++)
+            {
+                if (i==2)
+                {
+                    publisherPhone +="-"+phone[i];
+                }
+                else if (i==5)
+                {
+                    publisherPhone +="-"+phone[i];
+                }
+                else
+                {
+                    publisherPhone += phone[i];
+                }
+            }
+        
+        System.out.println("Please enter the new publisher's email");
+        String publisherEmail = UserInput.getInputLine();
+        
+        System.out.println("Please enter the old publisher's name that you wish to replace with");
+        String oldName = UserInput.getInputLine();               
+        while (!publishers.contains(oldName))
+        {
+            System.out.println("The database does not contains an entry with: ");
+            System.out.println("PublisherName: " + oldName);
+            System.out.println("Please enter existing publishers name");
+            displayInformation( "PUBLISHERS", "PUBLISHERNAME", conn );
+            oldName = UserInput.getInputLine();
+        }
+                            
+        String sql = "INSERT INTO "+table+ " (publisherName, publisherAddress,publisherPhone,publisherEmail) values(";
+        sql +=  singleQuoteString(publisherName) +","+singleQuoteString(publisherAddress)+","+singleQuoteString(publisherPhone)+","+singleQuoteString(publisherEmail) + ")";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.executeUpdate();
+                            
+        String sql2 = "Update Books set books.publishername = "+singleQuoteString(publisherName)+" where books.publisherName = "+singleQuoteString(oldName);
+        pstmt = conn.prepareStatement(sql2);
+        pstmt.executeUpdate();
+                            
+        String sql3 = "DELETE FROM "+table+" where publisherName = "+singleQuoteString(oldName);
+        pstmt = conn.prepareStatement(sql3);
+        pstmt.execute();
     }
     
     /*
