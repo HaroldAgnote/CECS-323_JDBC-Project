@@ -47,32 +47,29 @@ public class CECS323JavaTermProject
             do
             {
                 int menu = displayMainMenu();
-                if ( menu != 7 )
+                switch ( menu )
                 {
-                    switch ( menu )
-                    {
-                        case 1:
-                            displayWritingGroups( conn );
-                            break;
-                        case 2:
-                            displayPublishers( conn );
-                            break;
-                        case 3:
-                            displayBook( conn );
-                            break;
-                        case 4:
-                            insertBook( conn );
-                            break;
-                        case 5:
-                            insertPublisher( conn );
-                            break;
-                        case 6:
-                            removeBook( conn );
-                            break;
-                        default:
-                            done = true;
-                            break;
-                    }
+                    case 1:
+                        displayWritingGroups( conn );
+                        break;
+                    case 2:
+                        displayPublishers( conn );
+                        break;
+                    case 3:
+                        displayBook( conn );
+                        break;
+                    case 4:
+                        insertBook( conn );
+                        break;
+                    case 5:
+                        insertPublisher( conn );
+                        break;
+                    case 6:
+                        removeBook( conn );
+                        break;
+                    default:
+                        done = true;
+                        break;
                 }
             }
             while ( !done );
@@ -612,23 +609,23 @@ public class CECS323JavaTermProject
         String numberOfPages = "";
         
         do
-        { 
+        {
             System.out.println( "Enter Nothing to cancel Operation" );
             System.out.print( "Book Title: " );
             bookTitle = UserInput.getInputLine();
-            if(bookTitle.length()>50)
+            if ( bookTitle.length() > 50 )
             {
-                System.out.println("Book Title is too long Try again");
+                System.out.println( "Book Title is too long Try again" );
             }
             else
             {
                 if ( !books.contains( bookTitle ) && !bookTitle.trim().isEmpty() )
                 {
-                    System.out.println( bookTitle + " does not exist in Books" ); 
+                    System.out.println( bookTitle + " does not exist in Books" );
                     System.out.println( "Please enter an existing books from the list:\n" );
                     displayInformation( "BOOKS", "BOOKTITLE", conn );
                 }
-                else 
+                else
                 {
                     valid = true;
                 }
