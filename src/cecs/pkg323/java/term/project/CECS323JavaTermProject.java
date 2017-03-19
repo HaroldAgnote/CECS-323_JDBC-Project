@@ -734,7 +734,7 @@ public class CECS323JavaTermProject
     
         do
         {
-            System.out.println( "Please enter publisher name of the book" );
+            System.out.print( "Publisher Name: " );
             publisherName = UserInput.getInputLine();
             if ( publisherName.length() > 50 )
             {
@@ -845,8 +845,8 @@ public class CECS323JavaTermProject
     {
         HashSet < String > publishers = new HashSet <>();
         String sql = "SELECT PUBLISHERNAME FROM PUBLISHERS";
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery( sql );
+        PreparedStatement stmt = conn.prepareStatement( sql );
+        ResultSet rs = stmt.executeQuery();
     
         while ( rs.next() )
         {
@@ -861,8 +861,8 @@ public class CECS323JavaTermProject
     {
         HashSet < String > books = new HashSet <>();
         String sql = "SELECT BOOKTITLE FROM BOOKS";
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery( sql );
+        PreparedStatement stmt = conn.prepareStatement( sql );
+        ResultSet rs = stmt.executeQuery();
     
         while ( rs.next() )
         {
@@ -928,11 +928,6 @@ public class CECS323JavaTermProject
         {
             System.out.print( String.format( "%-" + format[ i ] + "s", dispNull( ( display[ i ] ) ) ) );
         }
-    }
-    
-    public static String singleQuoteString( String s )
-    {
-        return "'" + s + "'";
     }
 }
 
