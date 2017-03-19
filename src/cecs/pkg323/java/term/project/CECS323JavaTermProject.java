@@ -596,7 +596,10 @@ public class CECS323JavaTermProject
     {
         PreparedStatement pstmt = null;
         String viewBookSql = "SELECT * FROM BOOKS WHERE BOOKS.BOOKTITLE = ?";
-        String deleteBookSql = "DELETE FROM BOOKS WHERE BOOKS.BOOKTITLE = ?";
+        String deleteBookSql = "DELETE FROM BOOKS\n";
+        deleteBookSql += "WHERE BOOKS.BOOKTITLE = ?\n";
+        deleteBookSql += "AND BOOKS.PUBLISHERNAME = ?\n";
+        deleteBookSql += "AND BOOKS.GROUPNAME = ?\n";
         pstmt = conn.prepareStatement( viewBookSql );
         HashSet < String > books = getBooks( conn );
     
@@ -638,31 +641,47 @@ public class CECS323JavaTermProject
         {
             pstmt.setString( 1, bookTitle );
             ResultSet rs = pstmt.executeQuery();
-            
-            while ( rs.next() )
+    
+            boolean yesNo = false;
+    
+            do
             {
-                groupName = rs.getString( "GROUPNAME" );
-                publisherName = rs.getString( "PUBLISHERNAME" );
-                yearPublished = rs.getString( "YEARPUBLISHED" );
-                numberOfPages = rs.getString( "NUMBEROFPAGES" );
+                try
+                {
+                    rs.next();
+                    groupName = rs.getString( "GROUPNAME" );
+                    publisherName = rs.getString( "PUBLISHERNAME" );
+                    yearPublished = rs.getString( "YEARPUBLISHED" );
+                    numberOfPages = rs.getString( "NUMBEROFPAGES" );
+        
+                    String displayFormat = "%-20s: %-20s\n";
+                    System.out.println( "This is the Book you want to remove:\n" );
+                    System.out.printf( displayFormat, "Group Name", groupName );
+                    System.out.printf( displayFormat, "Book Title", bookTitle );
+                    System.out.printf( displayFormat, "Publisher", publisherName );
+                    System.out.printf( displayFormat, "Year Published", dispNull( yearPublished ) );
+                    System.out.printf( displayFormat, "Number of Pages", dispNull( numberOfPages ) );
+        
+                    System.out.println( "Do you want to remove this Book? (Y/N)" );
+        
+                    yesNo = UserInput.getYesNo();
+        
+                }
+                catch ( SQLException sql )
+                {
+                    System.out.println( "No other books to choose from" );
+                    break;
+                }
+                
             }
-            
-            String displayFormat = "%-20s: %-20s\n";
-            System.out.println( "This is the Book you want to remove:\n" );
-            System.out.printf( displayFormat, "Group Name", groupName );
-            System.out.printf( displayFormat, "Book Title", bookTitle );
-            System.out.printf( displayFormat, "Publisher", publisherName );
-            System.out.printf( displayFormat, "Year Published", dispNull( yearPublished ) );
-            System.out.printf( displayFormat, "Number of Pages", dispNull( numberOfPages ) );
-            
-            System.out.println( "Do you want to remove this Book? (Y/N)" );
-            
-            boolean yesNo = UserInput.getYesNo();
-            
+            while ( !yesNo );
+    
             if ( yesNo )
             {
                 pstmt = conn.prepareStatement( deleteBookSql );
                 pstmt.setString( 1, bookTitle );
+                pstmt.setString( 2, publisherName );
+                pstmt.setString( 3, groupName );
                 pstmt.execute();
             }
         }

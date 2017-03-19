@@ -127,4 +127,15 @@ VALUES ('Senior Writers', 'The World of Wonderland', 'Cengage', 2007);
 INSERT INTO books (groupName, bookTitle, publisherName, numberOfPages)
 VALUES ('Senior Writers', 'Guide for Golf Beginners', 'ABC Books', 2011);
 
-
+INSERT INTO BOOKS (groupName, bookTitle, publisherName, yearPublished, numberOfPages)
+VALUES
+    ('Coffee House', 'Alex Rider', 'Crown', 2008, 120),
+    ('New Day Fiction', 'Alex Rider', 'ABC Books', NULL, 232),
+    ('California Writers Club', 'The Martian', 'Scholastic', 2014, 999),
+    ('New Day Fiction', 'The Martian', 'Crown', 2001, NULL),
+    ('J.K. Rowling', 'The Martian', 'ABC Books', NULL, 333),
+    ('Coffee House', 'Web Design for Beginners', 'Scholastic', 2001, 120),
+    ('Northwest Science Writers Association', 'Web Design for Beginners', 'Crown',
+     2008, 200),
+    ('J.K. Rowling', 'Web Design for Beginners', 'ABC Books', 2013, 250),
+    ('Senior Writers', 'Web Design for Beginners', 'Broadway Books', 2017, 300);

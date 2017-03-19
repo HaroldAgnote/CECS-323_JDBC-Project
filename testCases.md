@@ -12,6 +12,7 @@ Fill each [ ] with 'X' if test case was passed.
  * [X] All rows from a table are listed
  * [X] Each row from the table can be selected/listed
  * [X] All data from each row correctly matches data in Database
+ * [ ] Can view multiple books with the same title separately with respective attribute information
  * [X] Can return to main menu after viewing data in rows
  
 
@@ -53,10 +54,11 @@ Fill each [ ] with 'X' if test case was passed.
  * [X] Removed Book's title cannot be blank
  * [X] Removed Book's title cannot exceed 50 characters
  * [X] Removed Book must exist in table Books
+ * [ ] If there are multiple books with the same title, be able to specify exactly which book to remove
  * [X] Verify that the Book has been removed from the Database
  
  ### Miscellaneous
- * [?] Verify that PreparedStatements are used instead of Statements
- * [?] Verify that Binding has been used wherever possible
+ * [X] Verify that PreparedStatements are used instead of Statements
+ * [X] Verify that Binding has been used wherever possible
  * [X] No exception occur due to bad User Input (i.e. inputting a number out of range, mismatch data type, etc.)
  * [X] No SQL Exceptions occur in the most common cases
