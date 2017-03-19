@@ -49,13 +49,44 @@ insert into WritingGroups
 ('Northwest Science Writers Association','Keith Seinfeld',1967,'Science'),
 ('California Writers Club','Jack London',2000,'All Genres');
 
+/* with only group Name, others null*/
+insert into WritingGroups (groupName) values ('Public Writer Group');
+
+/*yearFormed and subject being null*/
+insert into WritingGroups(groupName, headWriter) values ('Johnson Writing Club','Jason Johnson');
+
+/*subject being null*/
+insert into WritingGroups(groupName, headWriter, yearFormed) values ('Deluxe Book Room','Oxford Nielson',1995);
+/*headWriter and subject are null*/
+insert into WritingGroups(groupName, yearFormed) values ('Bixby Writing Center',2005);
+/*headWriter and yearFormed being null*/
+insert into WritingGroups(groupName, subject) values ('Senior Writers', 'All Genres');
+
+
 insert into publishers
 (publisherName, publisherAddress,publisherPhone,publisherEmail ) values
 ('Scholastic','557 Broadway','646-666-5768','scholastic@gmail.com'),
 ('Aberdeen Bay','5109 Eaton Rapids Road','703-346-6547','aberdeenbay@gmail.com'), 
 ('Alfresco Press','444 Jade St.','555-673-6958','alfrescopress@tampabay.rr.com'),
 ('Broadway Books','1745 Broadway','212-782-9000','broadwaybooks@gmail.com'),
-('Crown','1745 Broadway','212-666-53880','crown@gmail.com');
+('Crown','1745 Broadway','212-666-5388','crown@gmail.com');
+
+/* only publisher name is not null*/
+insert into publishers (publisherName) values('JFK Publish Center');
+
+/*phone, email null*/
+insert into publishers (publisherName, publisherAddress) values ('ABC Books','232 Orange Ave');
+
+/*address null*/
+insert into publishers (publisherName, publisherPhone, publisherEmail) values ('Child Development Association','666-573-5555','childdev@yahoo.com');
+
+/*address, email null*/
+insert into publishers (publisherName, publisherPhone) values ('McGraw-Hill Education','800-666-8888');
+
+/*phone address null*/
+insert into publishers (publisherName, publisherEmail) values ('Cengage','cengage@gmail.com');
+
+
 
 insert into books
 (groupName, bookTitle,publisherName,yearPublished, numberOfPages ) values
@@ -70,4 +101,10 @@ insert into books
 ('Northwest Science Writers Association','Burning Sky','Scholastic',1999,244),
 ('New Day Fiction','The Girl Under the Bodhi Tree','Broadway Books',2015,365);
 
--- TODO: Maybe we should add more entries that contain NULL values?
+insert into books(groupName,bookTitle, publisherName) values ('Bixby Writing Center','The Devil From the Other Side of Mountain','ABC Books');
+
+insert into books(groupName, bookTitle, publisherName, yearPublished) values ('Senior Writers','The World of Wonderland','Cengage',2007);
+
+insert into books(groupName, bookTitle, publisherName, numberOfPages) values ('Senior Writers','Guide for Golf Beginners','ABC Books',2011);
+
+

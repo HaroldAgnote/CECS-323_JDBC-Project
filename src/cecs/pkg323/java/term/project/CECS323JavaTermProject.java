@@ -244,10 +244,13 @@ public class CECS323JavaTermProject
     
     public static void displayMore( String table, String mainCol, ResultSet rs, Connection conn ) throws SQLException
     {
-        ArrayList < String > information = new ArrayList <>();
+        PreparedStatement stmt = null;
         String sql = "SELECT * FROM " + table;
         sql += "\nWHERE " + mainCol + " = ?";
-        PreparedStatement stmt = conn.prepareStatement( sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE );
+        stmt = conn.prepareStatement( sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE );
+    
+        ArrayList < String > information = new ArrayList <>();
+        
         int i = 1;
         while ( rs.next() )
         {
@@ -264,14 +267,30 @@ public class CECS323JavaTermProject
             if ( choice > 0 )
             {
                 String info = information.get( choice - 1 );
+                int stoppedIndex = 0;
+    
+                while ( !information.get( stoppedIndex ).equals( info ) )
+                {
+                    stoppedIndex++;
+                }
+                
                 stmt.setString( 1, info );
                 rs = stmt.executeQuery();
                 ResultSetMetaData data = rs.getMetaData();
+    
                 int numColumns = data.getColumnCount();
                 int[] colLength = new int[ numColumns ];
                 String[] columns = new String[ numColumns ];
                 String[] rowData = new String[ columns.length ];
-                rs.next();
+    
+                /*
+                 * Accounts for multiple books with same title
+                 */
+                for ( int j = 0; j < choice - stoppedIndex; j++ )
+                {
+                    rs.next();
+                }
+                
                 System.out.println();
                 for ( int j = 0; j < columns.length; j++ )
                 {
@@ -289,7 +308,6 @@ public class CECS323JavaTermProject
         while ( choice > 0 );
         
     }
-    
     
     /*
      * Planning on just checking if a Publisher/Writing Group exists in the table

@@ -69,7 +69,7 @@ insert into publishers
 ('Aberdeen Bay','5109 Eaton Rapids Road','703-346-6547','aberdeenbay@gmail.com'), 
 ('Alfresco Press','444 Jade St.','555-673-6958','alfrescopress@tampabay.rr.com'),
 ('Broadway Books','1745 Broadway','212-782-9000','broadwaybooks@gmail.com'),
-('Crown','1745 Broadway','212-666-53880','crown@gmail.com');
+    ('Crown', '1745 Broadway', '212-666-5388', 'crown@gmail.com');
 
 /* only publisher name is not null*/
 insert into publishers (publisherName) values('JFK Publish Center');
@@ -106,4 +106,5 @@ insert into books(groupName,bookTitle, publisherName) values ('Bixby Writing Cen
 insert into books(groupName, bookTitle, publisherName, yearPublished) values ('Senior Writers','The World of Wonderland','Cengage',2007);
 
 insert into books(groupName, bookTitle, publisherName, numberOfPages) values ('Senior Writers','Guide for Golf Beginners','ABC Books',2011);
+
 
