@@ -32,7 +32,6 @@ public class CECS323JavaTermProject
         //Constructing the database URL connection string
         DB_URL = DB_URL + DBNAME + ";user=" + USER + ";password=" + PASS;
         Connection conn = null; //initialize the connection
-        Statement stmt = null;  //initialize the statement that we're using
         try
         {
             //STEP 2: Register JDBC driver
@@ -89,16 +88,6 @@ public class CECS323JavaTermProject
             //finally block used to close resources
             try
             {
-                if ( stmt != null )
-                {
-                    stmt.close();
-                }
-            }
-            catch ( SQLException se2 )
-            {
-            }// nothing we can do
-            try
-            {
                 if ( conn != null )
                 {
                     conn.close();
@@ -111,36 +100,6 @@ public class CECS323JavaTermProject
         }//end try
         System.out.println( "Goodbye!" );
     }//end main
-    
-    /**
-     * Takes the input string and outputs "N/A" if the string is empty or null.
-     *
-     * @param input
-     *         The string to be mapped.
-     *
-     * @return Either the input string or "N/A" as appropriate.
-     */
-    public static String dispNull( String input )
-    {
-        //because of short circuiting, if it's null, it never checks the length.
-        if ( input == null || input.length() == 0 )
-        {
-            return "N/A";
-        }
-        try
-        {
-            if ( Integer.parseInt( input ) == -1 )
-            {
-                return "N/A";
-            }
-        }
-        catch ( NumberFormatException nfe )
-        {
-            
-        }
-        return input;
-    }
-    
     
     public static void login()
     {
@@ -303,6 +262,9 @@ public class CECS323JavaTermProject
             }
         }
         while ( choice > 0 );
+    
+        rs.close();
+        stmt.close();
         
     }
     
@@ -403,6 +365,8 @@ public class CECS323JavaTermProject
             }
             pstmt.execute();
         }
+    
+        pstmt.close();
     }
     
     public static void insertPublisher( Connection conn ) throws SQLException
@@ -585,7 +549,10 @@ public class CECS323JavaTermProject
             pstmt.setString( 1, publisherName );
             pstmt.setString( 2, oldName );
             pstmt.executeUpdate();
+    
+            rs.close();
         }
+        pstmt.close();
     }
     
     public static void removeBook( Connection conn ) throws SQLException
@@ -649,7 +616,7 @@ public class CECS323JavaTermProject
                     publisherName = rs.getString( "PUBLISHERNAME" );
                     yearPublished = rs.getString( "YEARPUBLISHED" );
                     numberOfPages = rs.getString( "NUMBEROFPAGES" );
-        
+    
                     String displayFormat = "%-20s: %-20s\n";
                     System.out.println( "This is the Book you want to remove:\n" );
                     System.out.printf( displayFormat, "Group Name", groupName );
@@ -657,11 +624,11 @@ public class CECS323JavaTermProject
                     System.out.printf( displayFormat, "Publisher", publisherName );
                     System.out.printf( displayFormat, "Year Published", dispNull( yearPublished ) );
                     System.out.printf( displayFormat, "Number of Pages", dispNull( numberOfPages ) );
-        
+    
                     System.out.println( "Do you want to remove this Book? (Y/N)" );
-        
+    
                     yesNo = UserInput.getYesNo();
-        
+    
                 }
                 catch ( SQLException sql )
                 {
@@ -680,7 +647,10 @@ public class CECS323JavaTermProject
                 pstmt.setString( 3, groupName );
                 pstmt.execute();
             }
+    
+            rs.close();
         }
+        pstmt.close();
     }
     
     public static String setBookTitle()
@@ -884,6 +854,10 @@ public class CECS323JavaTermProject
             String name = rs.getString( "BOOKTITLE" );
             books.add( name );
         }
+    
+        rs.close();
+        stmt.close();
+        
         return books;
     }
     
@@ -900,6 +874,9 @@ public class CECS323JavaTermProject
             writingGroups.add( info );
         }
     
+        rs.close();
+        stmt.close();
+        
         return writingGroups;
     }
     
@@ -916,6 +893,9 @@ public class CECS323JavaTermProject
             String book = rs.getString( "BOOKTITLE" );
             publisher_Book.add( publisher + "_" + book );
         }
+    
+        rs.close();
+        stmt.close();
         
         return publisher_Book;
     }
@@ -933,6 +913,9 @@ public class CECS323JavaTermProject
             String book = rs.getString( "BOOKTITLE" );
             group_Book.add( publisher + "_" + book );
         }
+    
+        rs.close();
+        stmt.close();
         
         return group_Book;
     }
@@ -944,6 +927,36 @@ public class CECS323JavaTermProject
             System.out.print( String.format( "%-" + format[ i ] + "s", dispNull( ( display[ i ] ) ) ) );
         }
     }
+    
+    /**
+     * Takes the input string and outputs "N/A" if the string is empty or null.
+     *
+     * @param input
+     *         The string to be mapped.
+     *
+     * @return Either the input string or "N/A" as appropriate.
+     */
+    public static String dispNull( String input )
+    {
+        //because of short circuiting, if it's null, it never checks the length.
+        if ( input == null || input.length() == 0 )
+        {
+            return "N/A";
+        }
+        try
+        {
+            if ( Integer.parseInt( input ) == -1 )
+            {
+                return "N/A";
+            }
+        }
+        catch ( NumberFormatException nfe )
+        {
+            
+        }
+        return input;
+    }
+    
 }
 
 
