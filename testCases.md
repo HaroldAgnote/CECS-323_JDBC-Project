@@ -12,7 +12,7 @@ Fill each [ ] with 'X' if test case was passed.
  * [X] All rows from a table are listed
  * [X] Each row from the table can be selected/listed
  * [X] All data from each row correctly matches data in Database
- * [ ] Can view multiple books with the same title separately with respective attribute information
+ * [X] Can view multiple books with the same title separately with respective attribute information
  * [X] Can return to main menu after viewing data in rows
  
 
@@ -47,14 +47,14 @@ Fill each [ ] with 'X' if test case was passed.
  * [X] Verify that the new Publisher was added to database upon execution of SQL Code
  * [X] Publisher to be replaced must exist in table PUBLISHERS
  * [X] Publisher to be replaced cannot be the same as the recently added Publisher
- * [?] List all books that have been published by the Publisher to be replaced
+ * [X] List all books that have been published by the Publisher to be replaced
  * [X] Verify that the books have been updated such that they are published by the new Publisher
  
 ### Remove Book
  * [X] Removed Book's title cannot be blank
  * [X] Removed Book's title cannot exceed 50 characters
  * [X] Removed Book must exist in table Books
- * [ ] If there are multiple books with the same title, be able to specify exactly which book to remove
+ * [X] If there are multiple books with the same title, be able to specify exactly which book to remove
  * [X] Verify that the Book has been removed from the Database
  
  ### Miscellaneous
