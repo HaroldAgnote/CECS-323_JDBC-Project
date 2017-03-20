@@ -306,10 +306,6 @@ public class CECS323JavaTermProject
         
     }
     
-    /*
-     * Planning on just checking if a Publisher/Writing Group exists in the table
-     * If so, proceed with add, otherwise prompt user to select a valid
-     */
     public static void insertBook( Connection conn ) throws SQLException
     {
         PreparedStatement pstmt = null;
@@ -551,16 +547,16 @@ public class CECS323JavaTermProject
             {
                 System.out.println( "Please enter the old publisher's name that you wish to update with" );
                 oldName = UserInput.getInputLine();
-                if ( !publishers.contains( oldName ) )
+                if ( oldName.equals( publisherName ) )
+                {
+                    System.out.println( "You can't use the recently added Publisher" );
+                }
+                else if ( !publishers.contains( oldName ) )
                 {
                     System.out.println( "The database does not contains an entry with: " );
                     System.out.println( "PublisherName: " + oldName );
                     System.out.println( "Please enter existing publishers name" );
                     displayInformation( "PUBLISHERS", "PUBLISHERNAME", conn );
-                }
-                else if ( oldName.equals( publisherName ) )
-                {
-                    System.out.println( "You can't use the recently added Publisher" );
                 }
                 else
                 {
@@ -757,7 +753,7 @@ public class CECS323JavaTermProject
             publisherName = UserInput.getInputLine();
             if ( publisherName.length() > 50 )
             {
-                System.out.println( "Group Name is too long, please enter less than 50 characters" );
+                System.out.println( "Publisher Name is too long, please enter less than 50 characters" );
                 publisherName = UserInput.getInputLine();
             }
             if ( publisherName.trim().isEmpty() )
