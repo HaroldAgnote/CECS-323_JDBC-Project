@@ -41,7 +41,8 @@ CREATE TABLE books (
 );
 
 INSERT INTO WritingGroups
-(groupName, headWriter, yearFormed, subject) VALUES
+(groupName, headWriter, yearFormed, subject)
+VALUES
     ('J.K. Rowling', 'J.K. Rowling', 1997, 'Fiction'),
     ('New Day Fiction', 'John Edward', 1996, 'Adult Fiction'),
     ('Coffee House', 'Christine Bryant', 1999, 'Novel'),
@@ -51,7 +52,8 @@ INSERT INTO WritingGroups
     ('California Writers Club', 'Jack London', 2000, 'All Genres');
 
 /* with only group Name, others null*/
-INSERT INTO WritingGroups (groupName) VALUES ('Public Writer Group');
+INSERT INTO WritingGroups (groupName)
+VALUES ('Public Writer Group');
 
 /*yearFormed and subject being null*/
 INSERT INTO WritingGroups (groupName, headWriter)
@@ -69,7 +71,8 @@ VALUES ('Senior Writers', 'All Genres');
 
 
 INSERT INTO publishers
-(publisherName, publisherAddress, publisherPhone, publisherEmail) VALUES
+(publisherName, publisherAddress, publisherPhone, publisherEmail)
+VALUES
     ('Scholastic', '557 Broadway', '646-666-5768', 'scholastic@gmail.com'),
     ('Aberdeen Bay', '5109 Eaton Rapids Road', '703-346-6547',
      'aberdeenbay@gmail.com'),
@@ -79,7 +82,8 @@ INSERT INTO publishers
     ('Crown', '1745 Broadway', '212-666-5388', 'crown@gmail.com');
 
 /* only publisher name is not null*/
-INSERT INTO publishers (publisherName) VALUES ('JFK Publish Center');
+INSERT INTO publishers (publisherName)
+VALUES ('JFK Publish Center');
 
 /*phone, email null*/
 INSERT INTO publishers (publisherName, publisherAddress)
@@ -99,7 +103,8 @@ VALUES ('Cengage', 'cengage@gmail.com');
 
 
 INSERT INTO books
-(groupName, bookTitle, publisherName, yearPublished, numberOfPages) VALUES
+(groupName, bookTitle, publisherName, yearPublished, numberOfPages)
+VALUES
     ('J.K. Rowling', 'Harry Potter and the Philosophers Stone', 'Scholastic', 2013,
      336),
     ('J.K. Rowling', 'Fantastic Beast and Where to Find Them', 'Scholastic', 2001,
@@ -117,7 +122,8 @@ INSERT INTO books
     ('New Day Fiction', 'The Girl Under the Bodhi Tree', 'Broadway Books', 2015,
      365);
 
-INSERT INTO books (groupName, bookTitle, publisherName) VALUES
+INSERT INTO books (groupName, bookTitle, publisherName)
+VALUES
     ('Bixby Writing Center', 'The Devil From the Other Side of Mountain',
      'ABC Books');
 
@@ -127,7 +133,7 @@ VALUES ('Senior Writers', 'The World of Wonderland', 'Cengage', 2007);
 INSERT INTO books (groupName, bookTitle, publisherName, numberOfPages)
 VALUES ('Senior Writers', 'Guide for Golf Beginners', 'ABC Books', 2011);
 
-INSERT INTO BOOKS (groupName, bookTitle, publisherName, yearPublished, numberOfPages)
+INSERT INTO books (groupName, bookTitle, publisherName, yearPublished, numberOfPages)
 VALUES
     ('Coffee House', 'Alex Rider', 'Crown', 2008, 120),
     ('New Day Fiction', 'Alex Rider', 'ABC Books', NULL, 232),
